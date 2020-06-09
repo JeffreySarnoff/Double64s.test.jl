@@ -1,6 +1,9 @@
 name = "Double64s"
 uuid = "f7056ef7-10e8-4267-995d-66cee1eee17a"
+keywords = ["math", "floating-point", "doubledouble", "extended-precision", "accuracy", "precision"]
 authors = ["Jeffrey Sarnoff <JeffreySarnoff@users.noreply.github.com>"]
+license = "MIT"
+desc = "Accurate Float64 math functions using error-free transformations."
 version = "0.1.0"
 
 [deps]
