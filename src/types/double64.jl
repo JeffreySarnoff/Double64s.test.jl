@@ -9,6 +9,14 @@ struct ComplexD64 <: Complex
     val::TwoTupleC64
 end
 
+hi(x::TwoTupleF64) = x[1]
+lo(x::TwoTupleF64) = x[2]
+hilo(x::TwoTupleF64) = x
+
+hi(x::TwoTupleC64) = x[1]
+lo(x::TwoTupleC64) = x[2]
+hilo(x::TwoTupleC64) = x
+
 hi(x::FloatD64) = x.val[1]
 lo(x::FloatD64) = x.val[2]
 hilo(x::FloatD64) = x.val
