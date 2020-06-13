@@ -34,48 +34,30 @@ A struct wrapping `TwoTupleC64`
 """ ComplexD64
 
 """
-    FCD64
+    FloatCmplxD64
 
 Union{FloatD64, ComplexD64}
-""" FCD64
+""" FloatCmplxD64
 
 """
    hilo(x)
 
-unwraps x::D64
+unwraps x::FloatCmplxD64
 """ hilo
 
 """
    hi(x)
 
-unwraps first(x::D64)
+unwraps first(x::FloatCmplxD64)
 """ hi
 
 """
    lo(x)
 
-unwraps last(x::D64)
+unwraps last(x::FloatCmplxD64)
 """ lo
-
 
 include("types/double64.jl")
 
-
-
-hi(x::FloatD64) = x.val[1]
-lo(x::FloatD64) = x.val[2]
-hilo(x::FloatD64) = x.val
-
-hi(x::ComplexD64) = x.val[1]
-lo(x::ComplexD64) = x.val[2]
-hilo(x::ComplexD64) = x.val
-
-hi(x::Float64) = x
-lo(x::Float64) = 0.0
-hilo(x::Float64) = (x, 0.0)
-
-hi(x::Complex{Float64}) = x
-lo(x::Complex{Float64}) = 0.0+0.0im
-hilo(x::Complex{Float64}) = (x, 0.0+0.0im)
 
 end  # Double64s
