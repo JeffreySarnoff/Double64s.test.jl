@@ -3,16 +3,64 @@ module Double64s
 export FloatD64, ComplexD64,
   hi, lo, hilo
 
-const TwoTupleF64 = Tuple{Float64, Float64}
-const TwoTupleC64 = Tuple{Complex{Float64}, Complex{Float64}}
+"""
+    TwoTupleF64
 
-struct FloatD64 <: Real
-    val::TwoTupleF64
-end
+Two Float64s as a Tuple.
+""" TwoTupleF64
 
-struct ComplexD64 <: Complex
-    val::TwoTupleC64
-end
+"""
+    TwoTupleC64
+
+Two Complex{Float64}s as a Tuple.
+""" TwoTupleC64
+
+"""
+    TwoTuple64
+
+Union{TwoTupleF64, TwoTupleC64}
+""" TwoTuple64
+
+"""
+    FloatD64 <: Real
+
+A struct wrapping `TwoTupleF64`
+""" FloatD64
+
+"""
+    ComplexD64 <: Complex
+
+A struct wrapping `TwoTupleC64`
+""" ComplexD64
+
+"""
+    FCD64
+
+Union{FloatD64, ComplexD64}
+""" FCD64
+
+"""
+   hilo(x)
+
+unwraps x::D64
+""" hilo
+
+"""
+   hi(x)
+
+unwraps first(x::D64)
+""" hi
+
+"""
+   lo(x)
+
+unwraps last(x::D64)
+""" lo
+
+
+include("types/double64.jl")
+
+
 
 hi(x::FloatD64) = x.val[1]
 lo(x::FloatD64) = x.val[2]
