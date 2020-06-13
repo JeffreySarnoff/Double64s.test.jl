@@ -1,5 +1,6 @@
 const TwoTupleF64 = Tuple{Float64, Float64}
 const TwoTupleC64 = Tuple{Complex{Float64}, Complex{Float64}}
+const TwoTuple64 = Union{TwoTupleF64, TwoTupleC64}
 
 struct FloatD64 <: Real
     val::TwoTupleF64
@@ -8,6 +9,8 @@ end
 struct ComplexD64 <: Complex
     val::TwoTupleC64
 end
+
+const FloatCmplxD64 = Union{FloatD64, ComplexD64}
 
 hi(x::TwoTupleF64) = x[1]
 lo(x::TwoTupleF64) = x[2]
