@@ -1,3 +1,3 @@
-using Double64s, Test
+using Double64s, ErrorfreeArithmetic, Test
 
 include("constructors.jl")
