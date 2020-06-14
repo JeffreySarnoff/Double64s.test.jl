@@ -5,6 +5,7 @@ mul(x::T, y::T) where {T<:Number} = x * y
 divide(x::T, y::T) where {T<:Number} = x / y
 
 for T in (:FloatD64, :TwoTupleF64)
+  @eval begin  
     function neg(x::$T)
         return $T(-hi(x), -lo(x))
     end
@@ -76,4 +77,6 @@ for T in (:FloatD64, :TwoTupleF64)
     Base.:(*)(x::$T, y::$T) = mul(x, y)
     Base.:(/)(x::$T, y::$T) = divide(x, y)
     Base.:(\)(x::$T, y::$T) = divide(y, x)
+
+  end      
 end
