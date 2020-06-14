@@ -22,7 +22,7 @@ ComplexD64(x::ComplexF64, y::ComplexF64) = ComplexD64(two_sum(x, y))
 function FloatD64(x::BigFloat)
     hi = Float64(x)
     lo = Float64(x - hi)
-    return Float64((hi, lo))
+    return FloatD64((hi, lo))
 end
 
 function ComplexD64(x::Complex{BigFloat})
