@@ -63,5 +63,6 @@ include("types/double64.jl")
 include("types/constructors.jl")
 
 include("math/arith.jl")
+include("math/default.jl")
 
 end  # Double64s
