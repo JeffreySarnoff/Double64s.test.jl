@@ -1,8 +1,8 @@
-neg(x::T) where {T<:Numeric} = -x
-add(x::T, y::T) where {T<:Numeric} = x + y
-sub(x::T, y::T) where {T<:Numeric} = x - y
-mul(x::T, y::T) where {T<:Numeric} = x * y
-divide(x::T, y::T) where {T<:Numeric} = x / y
+neg(x::T) where {T<:Number} = -x
+add(x::T, y::T) where {T<:Number} = x + y
+sub(x::T, y::T) where {T<:Number} = x - y
+mul(x::T, y::T) where {T<:Number} = x * y
+divide(x::T, y::T) where {T<:Number} = x / y
 
 for T in (:FloatD64, :TwoTupleF64)
     function neg(x::$T)
