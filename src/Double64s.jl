@@ -58,6 +58,6 @@ unwraps last(x::FloatCmplxD64)
 """ lo
 
 include("types/double64.jl")
-
+include("types/constructors.jl")
 
 end  # Double64s
