@@ -17,7 +17,7 @@ TwoTupleC64(x::Float64, y::Float64) = (Complex{Float64}(x,0.0), Complex{Float64}
 FloatD64(x::Float64) = FloatD64((x, 0.0))
 FloatD64(x::Float64, y::Float64) = FloatD64(two_sum(x, y))
 
-ComplexD64(x::Complex{Float64}) = ComplexD64((x, 0.0+0.0im))
+ComplexD64(x::Com}) = ComplexD64((x, 0.0+0.0im))
 ComplexD64(x::Complex{Float64}, y::Complex{Float64}) = ComplexD64(two_sum(x, y))
 
 function FloatD64(x::BigFloat)
@@ -51,3 +51,9 @@ FloatD64(x::T) where {T<:Union{Float16, Float32}} = FloatD64(Float64(x))
 FloatD64(x::T) where {T<:Signed} = FloatD64(BigInt(x))
 FloatD64(x::T) where {T<:Real} = FloatD64(BigFloat(x))
 
+ComplexD64(x::Int64) = ComplexD64(FloatD64(x))
+ComplexD64(x::T) where {T<:Union{Int32, Int16, Int8}} = ComplexD64(Int64(x))
+ComplexD64(x::T) where {T<:Union{Float16, Float32}} = ComplexD64(Float64(x))
+ComplexD64(x::T) where {T<:Signed} = ComplexD64(BigInt(x))
+ComplexD64(x::T) where {T<:Real} = ComplexD64(BigFloat(x))
+ComplexD64(x::T, y::T) where {T<:Real} = ComplexD64(FloatD64(x), FloatD64(y))
