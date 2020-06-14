@@ -12,7 +12,6 @@ TwoTupleC64(x::ComplexF64) = (x, Complex{Float64}(0.0,0.0))
 TwoTupleC64(x::ComplexF64, y::ComplexF64) = (x, y)
 TwoTupleC64(x::ComplexF64, y::Float64) = (x, Complex{Float64}(y,0.0))
 TwoTupleC64(x::Float64, y::ComplexF64) = (Complex{Float64}(x,0.0), y)
-TwoTupleC64(x::Float64, y::Float64) = (Complex{Float64}(x,0.0), Complex{Float64}(y,0.0))
 
 FloatD64(x::Float64) = FloatD64((x, 0.0))
 FloatD64(x::Float64, y::Float64) = FloatD64(two_sum(x, y))
