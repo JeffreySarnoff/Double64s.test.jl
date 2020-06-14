@@ -57,3 +57,13 @@ ComplexD64(x::T) where {T<:Union{Float16, Float32}} = ComplexD64(Float64(x))
 ComplexD64(x::T) where {T<:Signed} = ComplexD64(BigInt(x))
 ComplexD64(x::T) where {T<:Real} = ComplexD64(BigFloat(x))
 ComplexD64(x::T, y::T) where {T<:Real} = ComplexD64(FloatD64(x), FloatD64(y))
+
+# inverse constructors
+Base.Float64(x::FloatD64) = hi(x)
+Base.Float64(x::ComplexD64) = real(hi(x))
+Base.ComplexF64(x::FloatD64) = ComplexF64(hi(x), 0.0)
+Base.ComplexF64(x::ComplexD64) = ComplexF64(hi(x)...)
+Base.BigFloat(x::FloatD64) = BigFloat(hi(x)) + BigFloat(lo(x))
+Base.BigFloat(x::ComplexD64) = BigFloat(real(hi(x))) + BigFloat(real(lo(x)))
+
+
