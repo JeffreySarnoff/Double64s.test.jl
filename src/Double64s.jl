@@ -3,6 +3,8 @@ module Double64s
 export FloatD64, ComplexD64,
   hi, lo, hilo
 
+using ErrorfreeArithmetic
+
 """
     TwoTupleF64
 
