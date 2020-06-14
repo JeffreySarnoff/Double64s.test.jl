@@ -19,3 +19,35 @@ FloatD64(x::Float64, y::Float64) = FloatD64(two_sum(x, y))
 
 ComplexD64(x::Complex{Float64}) = ComplexD64((x, 0.0+0.0im))
 ComplexD64(x::Complex{Float64}, y::Complex{Float64}) = ComplexD64(two_sum(x, y))
+
+function FloatD64(x::BigFloat)
+    hi = Float64(x)
+    lo = Float64(x - hi)
+    return Float64((hi, lo))
+end
+
+function ComplexD64(x::Complex{BigFloat})
+    hi = ComplexF64(x)
+    lo = ComplexF64(x - hi)
+    return ComplexD64((hi, lo))
+end
+
+FloatD64(x::T) where {T<:Union{BigInt, Int128}} = FloatD64(BigFloat(x))
+ComplexD64(x::Complex{T}) where {T<:Union{BigInt, Int128}} = ComplexD64(Complex{BigFloat}(x))
+
+function FloatD64(x::Int64)
+    hi = maxintfloat(Float64)
+    if abs(x) <= hi 
+       FloatD64(Float64(x))
+    else
+       hi = copysign(hi, x)
+       lo = x - hi
+       FloatD64(Float64(hi), Float64(lo)) # does two_sum
+    end
+end
+
+FloatD64(x::T) where {T<:Union{Int32, Int16, Int8}} = FloatD64(Int64(x))
+FloatD64(x::T) where {T<:Union{Float16, Float32}} = FloatD64(Float64(x))
+FloatD64(x::T) where {T<:Signed} = FloatD64(BigInt(x))
+FloatD64(x::T) where {T<:Real} = FloatD64(BigFloat(x))
+
