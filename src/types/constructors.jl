@@ -65,4 +65,9 @@ Base.ComplexF64(x::ComplexD64) = ComplexF64(hi(x)...)
 Base.BigFloat(x::FloatD64) = BigFloat(hi(x)) + BigFloat(lo(x))
 Base.BigFloat(x::ComplexD64) = BigFloat(real(hi(x))) + BigFloat(real(lo(x)))
 
-
+Quadmath.Float128(x::FloatD64) = Float128(hi(x)) + Float128(lo(x))
+function FloatD64(x::Float128)
+    hi = Float64(x)
+    lo = Float64(x - hi)
+    return Float64((hi, lo))
+end
