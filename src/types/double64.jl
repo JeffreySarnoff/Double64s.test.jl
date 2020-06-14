@@ -6,7 +6,7 @@ struct FloatD64 <: Real
     val::TwoTupleF64
 end
 
-struct ComplexD64 <: Complex
+struct ComplexD64 <: Number
     val::TwoTupleC64
 end
 
