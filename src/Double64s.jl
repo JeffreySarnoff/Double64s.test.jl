@@ -60,4 +60,6 @@ unwraps last(x::FloatCmplxD64)
 include("types/double64.jl")
 include("types/constructors.jl")
 
+include("math/arith.jl")
+
 end  # Double64s
