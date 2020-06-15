@@ -3,7 +3,7 @@ module Double64s
 export FloatD64, ComplexD64,
   hi, lo, hilo
 
-using ErrorfreeArithmetic
+using ErrorfreeArithmetic, Quadmath
 
 """
     TwoF64
