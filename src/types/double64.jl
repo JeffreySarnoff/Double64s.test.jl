@@ -1,37 +1,73 @@
-const TwoTupleF64 = Tuple{Float64, Float64}
-const TwoTupleC64 = Tuple{Complex{Float64}, Complex{Float64}}
-const TwoTuple64 = Union{TwoTupleF64, TwoTupleC64}
+TwoF64(x::Float64) = (x, 0.0)
+TwoF64(x::Float64, y::Float64) = (x, y)
 
-struct FloatD64 <: Real
-    val::TwoTupleF64
+TwoF64(x::ComplexF64, y::Float64) = (real(x), y)
+TwoF64(x::Float64, y::ComplexF64) = (x, real(y))
+Twof64(x::ComplexF64, y::ComplexF64) = (real(x), real(y))
+
+TwoC64(x::Float64) = (Complex{Float64}(x,0.0), Complex{Float64}(0.0,0.0))
+TwoC64(x::Float64, y::Float64) = (Complex{Float64}(x,0.0), Complex{Float64}(y,0.0))
+
+TwoC64(x::ComplexF64) = (x, Complex{Float64}(0.0,0.0))
+TwoC64(x::ComplexF64, y::ComplexF64) = (x, y)
+TwoC64(x::ComplexF64, y::Float64) = (x, Complex{Float64}(y,0.0))
+TwoC64(x::Float64, y::ComplexF64) = (Complex{Float64}(x,0.0), y)
+
+FloatD64(x::Float64) = FloatD64((x, 0.0))
+FloatD64(x::Float64, y::Float64) = FloatD64(two_sum(x, y))
+
+ComplexD64(x::ComplexF64) = ComplexD64((x, 0.0+0.0im))
+ComplexD64(x::ComplexF64, y::ComplexF64) = ComplexD64(two_sum(x, y))
+
+function FloatD64(x::BigFloat)
+    hi = Float64(x)
+    lo = Float64(x - hi)
+    return FloatD64((hi, lo))
 end
 
-struct ComplexD64 <: Number
-    val::TwoTupleC64
+function ComplexD64(x::Complex{BigFloat})
+    hi = ComplexF64(x)
+    lo = ComplexF64(x - hi)
+    return ComplexD64((hi, lo))
 end
 
-const FloatCmplxD64 = Union{FloatD64, ComplexD64}
+FloatD64(x::T) where {T<:Union{BigInt, Int128}} = FloatD64(BigFloat(x))
+ComplexD64(x::Complex{T}) where {T<:Union{BigInt, Int128}} = ComplexD64(Complex{BigFloat}(x))
 
-hi(x::TwoTupleF64) = x[1]
-lo(x::TwoTupleF64) = x[2]
-hilo(x::TwoTupleF64) = x
+function FloatD64(x::Int64)
+    hi = maxintfloat(Float64)
+    if abs(x) <= hi 
+       FloatD64(Float64(x))
+    else
+       hi = copysign(hi, x)
+       lo = x - hi
+       FloatD64(Float64(hi), Float64(lo)) # does two_sum
+    end
+end
 
-hi(x::TwoTupleC64) = x[1]
-lo(x::TwoTupleC64) = x[2]
-hilo(x::TwoTupleC64) = x
+FloatD64(x::T) where {T<:Union{Int32, Int16, Int8}} = FloatD64(Int64(x))
+FloatD64(x::T) where {T<:Union{Float16, Float32}} = FloatD64(Float64(x))
+FloatD64(x::T) where {T<:Signed} = FloatD64(BigInt(x))
+FloatD64(x::T) where {T<:Real} = FloatD64(BigFloat(x))
 
-hi(x::FloatD64) = x.val[1]
-lo(x::FloatD64) = x.val[2]
-hilo(x::FloatD64) = x.val
+ComplexD64(x::Int64) = ComplexD64(FloatD64(x))
+ComplexD64(x::T) where {T<:Union{Int32, Int16, Int8}} = ComplexD64(Int64(x))
+ComplexD64(x::T) where {T<:Union{Float16, Float32}} = ComplexD64(Float64(x))
+ComplexD64(x::T) where {T<:Signed} = ComplexD64(BigInt(x))
+ComplexD64(x::T) where {T<:Real} = ComplexD64(BigFloat(x))
+ComplexD64(x::T, y::T) where {T<:Real} = ComplexD64(FloatD64(x), FloatD64(y))
 
-hi(x::ComplexD64) = x.val[1]
-lo(x::ComplexD64) = x.val[2]
-hilo(x::ComplexD64) = x.val
+# inverse constructors
+Base.Float64(x::FloatD64) = hi(x)
+Base.Float64(x::ComplexD64) = real(hi(x))
+Base.ComplexF64(x::FloatD64) = ComplexF64(hi(x), 0.0)
+Base.ComplexF64(x::ComplexD64) = ComplexF64(hi(x)...)
+Base.BigFloat(x::FloatD64) = BigFloat(hi(x)) + BigFloat(lo(x))
+Base.BigFloat(x::ComplexD64) = BigFloat(real(hi(x))) + BigFloat(real(lo(x)))
 
-hi(x::Float64) = x
-lo(x::Float64) = 0.0
-hilo(x::Float64) = (x, 0.0)
-
-hi(x::Complex{Float64}) = x
-lo(x::Complex{Float64}) = 0.0+0.0im
-hilo(x::Complex{Float64}) = (x, 0.0+0.0im)
+Quadmath.Float128(x::FloatD64) = Float128(hi(x)) + Float128(lo(x))
+function FloatD64(x::Float128)
+    hi = Float64(x)
+    lo = Float64(x - hi)
+    return Float64((hi, lo))
+end
