@@ -1,4 +1,4 @@
-for F in (:abs, :sqrt, :cbrt,
+for F in (:sqrt, :cbrt,
           :exp, :expm1, :log, :log10, :log1p, :log2,
           :acos, :acosh, :asin, :asinh, :atan, :atanh,
           :cos, :cosh, :sin, :sincos, :sinh, :tan, :tanh,
@@ -9,7 +9,7 @@ end
 Base.Math.modf(x::FloatD64) = FloatD64.(modf(Float128(x)))
 Base.Math.hypot(x::FloatD64, y::FloatD64) = FloatD64(hypot(Float128(x), Float128(y)))
 
-for F in (:abs, :sqrt, :cbrt,
+for F in (:sqrt, :cbrt,
           :exp, :expm1, :log, :log10, :log1p, :log2,
           :acos, :acosh, :asin, :asinh, :atan, :atanh,
           :cos, :cosh, :sin, :sincos, :sinh, :tan, :tanh,
