@@ -6,33 +6,33 @@ export FloatD64, ComplexD64,
 using ErrorfreeArithmetic
 
 """
-    TwoTupleF64
+    TwoF64
 
 Two Float64s as a Tuple.
-""" TwoTupleF64
+""" TwoF64
 
 """
-    TwoTupleC64
+    TwoC64
 
 Two Complex{Float64}s as a Tuple.
-""" TwoTupleC64
+""" TwoC64
 
 """
-    TwoTuple64
+    Two64
 
-Union{TwoTupleF64, TwoTupleC64}
-""" TwoTuple64
+Union{TwoF64, TwoC64}
+""" Two64
 
 """
     FloatD64 <: Real
 
-A struct wrapping `TwoTupleF64`
+A struct wrapping `TwoF64`
 """ FloatD64
 
 """
     ComplexD64 <: Complex
 
-A struct wrapping `TwoTupleC64`
+A struct wrapping `TwoC64`
 """ ComplexD64
 
 """
