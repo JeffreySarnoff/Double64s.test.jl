@@ -1,3 +1,5 @@
+import Base.Math: abs, sqrt, cbrt, exp, expm1, log, log10, log1p, log2, ceil, floor, truc, round
+
 for F in (:abs, :sqrt, :cbrt,
           :exp, :expm1, :log, :log10, :log1p, :log2,
           :acos, :acosh, :asin, :asinh, :atan, :atanh,
