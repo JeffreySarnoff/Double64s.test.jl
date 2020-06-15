@@ -4,7 +4,7 @@ sub(x::T, y::T) where {T<:Number} = x - y
 mul(x::T, y::T) where {T<:Number} = x * y
 divide(x::T, y::T) where {T<:Number} = x / y
 
-for T in (:FloatD64, :TwoTupleF64)
+for T in (:FloatD64, :TwoF64)
   @eval begin  
     function neg(x::$T)
         return $T(-hi(x), -lo(x))
