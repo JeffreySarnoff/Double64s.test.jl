@@ -15,15 +15,19 @@ using ErrorfreeArithmetic, Quadmath
 # online help text for the types
 
 """
-    FloatD64 <: Real
+    FloatD64
 
 A struct wrapping a Tuple of two Float64s: (most significant part, least significant part).
+
+Also the constructor for that struct.
 """ FloatD64
 
 """
     ComplexD64 <: Complex
 
 A struct wrapping a Tuple of two Complex{Float64}s: (most significant part, least significant part).
+
+Also the constructor for that struct.
 """ ComplexD64
 
 """
@@ -35,19 +39,19 @@ Union of FloatD64 and ComplexD64 types.
 """
    hilo(x)
 
-Unwraps x::Union{FloatD64, ComplexD64}, a two tuple: (most significant part, least significant part).
+Unwraps the two tuple: (most significant part, least significant part).
 """ hilo
 
 """
    hi(x)
 
-Unwraps first(x::FloatComplexD64), the most significant part.
+Unwraps the most significant part.
 """ hi
 
 """
    lo(x)
 
-Unwraps last(x::FloatComplexD64), the least signficant part.
+Unwraps the least signficant part.
 """ lo
 
 include("types/double64.jl")
