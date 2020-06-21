@@ -1,13 +1,13 @@
 """
     Double64s
 
-types: see @Ref[FloatD64], @Ref[ComplexD64], @Ref[FloatComplexD64]
+exported types: FloatD64(@ref), ComplexD64(@ref), FloatComplexD64(@ref)
 
-type accessors: see @Ref[hi], @Ref[lo], @Ref[hilo]
+type field accessors: hi(@ref), lo(@ref), hilo(@ref)
 """
 module Double64s
 
-export FloatD64, ComplexD64,
+export FloatD64, ComplexD64, FloatComplexD64,
   hi, lo, hilo
 
 using ErrorfreeArithmetic, Quadmath
