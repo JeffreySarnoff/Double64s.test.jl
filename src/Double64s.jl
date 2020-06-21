@@ -1,3 +1,10 @@
+"""
+    Double64s::Module
+
+types: see @Ref[FloatD64], @Ref[ComplexD64], @Ref[FloatComplexD64]
+
+type accessors: see @Ref[hi], @Ref[lo], @Ref[hilo]
+""" Double64s
 module Double64s
 
 export FloatD64, ComplexD64,
@@ -20,9 +27,9 @@ A struct wrapping a Tuple of two Complex{Float64}s: (most significant part, leas
 """ ComplexD64
 
 """
-    FloatComplexD64
+    FloatComplexD64 <: Union
 
-Union{FloatD64, ComplexD64}
+Union of FloatD64 and ComplexD64 types.
 """ FloatComplexD64
 
 """
@@ -34,13 +41,13 @@ Unwraps x::Union{FloatD64, ComplexD64}, a two tuple: (most significant part, lea
 """
    hi(x)
 
-Unwraps first(x::FloatCmplxD64), the most significant part.
+Unwraps first(x::FloatComplexD64), the most significant part.
 """ hi
 
 """
    lo(x)
 
-Unwraps last(x::FloatCmplxD64), the least signficant part.
+Unwraps last(x::FloatComplexD64), the least signficant part.
 """ lo
 
 include("types/double64.jl")
