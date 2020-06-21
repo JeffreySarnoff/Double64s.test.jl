@@ -5,6 +5,8 @@ export FloatD64, ComplexD64,
 
 using ErrorfreeArithmetic, Quadmath
 
+# online help text for the types
+
 """
     TwoF64
 
