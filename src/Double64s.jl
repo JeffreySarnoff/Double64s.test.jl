@@ -1,10 +1,10 @@
 """
-    Double64s::Module
+    Double64s
 
 types: see @Ref[FloatD64], @Ref[ComplexD64], @Ref[FloatComplexD64]
 
 type accessors: see @Ref[hi], @Ref[lo], @Ref[hilo]
-""" Double64s
+"""
 module Double64s
 
 export FloatD64, ComplexD64,
