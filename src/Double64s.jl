@@ -8,57 +8,39 @@ using ErrorfreeArithmetic, Quadmath
 # online help text for the types
 
 """
-    TwoF64
-
-Two Float64s as a Tuple.
-""" TwoF64
-
-"""
-    TwoC64
-
-Two Complex{Float64}s as a Tuple.
-""" TwoC64
-
-"""
-    Two64
-
-Union{TwoF64, TwoC64}
-""" Two64
-
-"""
     FloatD64 <: Real
 
-A struct wrapping `TwoF64`
+A struct wrapping a Tuple of two Float64s: (most significant part, least significant part).
 """ FloatD64
 
 """
     ComplexD64 <: Complex
 
-A struct wrapping `TwoC64`
+A struct wrapping a Tuple of two Complex{Float64}s: (most significant part, least significant part).
 """ ComplexD64
 
 """
-    FloatCmplxD64
+    FloatComplexD64
 
 Union{FloatD64, ComplexD64}
-""" FloatCmplxD64
+""" FloatComplexD64
 
 """
    hilo(x)
 
-unwraps x::FloatCmplxD64
+Unwraps x::Union{FloatD64, ComplexD64}, a two tuple: (most significant part, least significant part).
 """ hilo
 
 """
    hi(x)
 
-unwraps first(x::FloatCmplxD64)
+Unwraps first(x::FloatCmplxD64), the most significant part.
 """ hi
 
 """
    lo(x)
 
-unwraps last(x::FloatCmplxD64)
+Unwraps last(x::FloatCmplxD64), the least signficant part.
 """ lo
 
 include("types/double64.jl")
