@@ -1,9 +1,9 @@
 """
     Double64s
 
-exported types: FloatD64(@ref), ComplexD64(@ref), FloatComplexD64(@ref)
+exported types: [`FloatD64`](@ref), [`ComplexD64`](@ref), [`FloatComplexD64`](@ref)
 
-type field accessors: hi(@ref), lo(@ref), hilo(@ref)
+exported field accessors: [`hi`](@ref), [`lo`](@ref), [`hilo`](@ref)
 """
 module Double64s
 
