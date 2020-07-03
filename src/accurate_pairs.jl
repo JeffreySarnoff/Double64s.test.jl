@@ -1,5 +1,21 @@
 using Base: IEEEFloat
 
+#=
+
+  - error-free transformations (`two_sum`, `two_diff`, `two_square`, `two_prod`,
+                                `two_hilo_sum`, `two_lohi_sum`, `two_hilo_diff`, `two_lohi_diff`)
+  - least-error transformations (`two_sqrt`, `two_inv`, `two_div`)
+
+ nomenclature: 
+ - `two_<op>`: the "two" refers to the number of values returned
+    two and three argument versions of `two_[sum,diff,prod]` are given
+ - `two_hilo_<op>` the argments are ordered by non-increasing absolute value
+    - this is `fast_two_sum` in the literature
+ - `two_lohi_<op>` the argments are ordered by non-decreasing absolute value
+    - this is not available in the literature
+
+=#
+
 """
     two_sum(a, b)
     
