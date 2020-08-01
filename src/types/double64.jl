@@ -4,7 +4,7 @@ const HiLoC64 = NTuple{2, Complex{Float64}}
 HiLoF64(x::Float64) = (x, 0.0)
 HiLoF64(hi::Float64, lo::Float64) = (hi, lo)
 HiLoF64(x::Complex{Float64}) = (real(x), 0.0)
-HiLoF64(hi::Comlex{Float64}, lo::Complex{Float64}) = (real(hi), real(lo))
+HiLoF64(hi::Complex{Float64}, lo::Complex{Float64}) = (real(hi), real(lo))
 
 HiLoC64(x::Float64) = (Complex{Float64}(x), 0.0+0.0im)
 HiLoC64(hi::Float64, lo::Float64) = (Complex{Float64}(hi), Complex{Float64}(lo))
