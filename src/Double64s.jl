@@ -46,12 +46,16 @@ Unwraps the two tuple: (most significant part, least significant part).
    hi(x)
 
 Unwraps the most significant part.
+
+[`lo`](@ref), [`hilo`](@ref)
 """ hi
 
 """
    lo(x)
 
 Unwraps the least signficant part.
+
+[`hi`](@ref), [`hilo`](@ref)
 """ lo
 
 include("types/double64.jl")
