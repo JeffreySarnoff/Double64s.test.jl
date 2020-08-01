@@ -16,10 +16,10 @@ end
 
 for (T1,T2) in ((:Float64, :(Complex{Float64})), (:(Complex{Float64}), :Float64))
   @eval begin
-    add(x::$T, y::$T) = add(promote(x, y)...)
-    sub(x::$T, y::$T) = sub(promote(x, y)...)
-    mul(x::$T, y::$T) = mul(promote(x, y)...)
-    divide(x::$T, y::$T) = divide(promote(x, y)...)
+    add(x::$T1, y::$T2) = add(promote(x, y)...)
+    sub(x::$T1, y::$T2) = sub(promote(x, y)...)
+    mul(x::$T1, y::$T2) = mul(promote(x, y)...)
+    divide(x::$T1, y::$T2) = divide(promote(x, y)...)
   end
 end
 
