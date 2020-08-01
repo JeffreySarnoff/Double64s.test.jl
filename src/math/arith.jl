@@ -23,19 +23,10 @@ for (T1,T2) in ((:Float64, :(Complex{Float64})), (:(Complex{Float64}), :Float64)
   end
 end
 
-for T in (:FloatD64, :TwoF64)
+for T in (:FloatD64,)
   @eval begin  
     function neg(x::$T)
         return $T(-hi(x), -lo(x))
-    end
-    
-    function Base.abs(x::$T)
-        return $T(abs(hi(x)), flipsign(lo(x), hi(x)))
-    end
-    
-    function Base.abs2(x::$T)
-        a = abs(x)
-        return mul(a, a)
     end
     
     # relative error < 3u², 20 FP Ops
