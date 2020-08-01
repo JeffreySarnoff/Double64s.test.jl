@@ -2,7 +2,7 @@ for F in (:sqrt, :cbrt,
           :exp, :expm1, :log, :log10, :log1p, :log2,
           :acos, :acosh, :asin, :asinh, :atan, :atanh,
           :cos, :cosh, :sin, :sincos, :sinh, :tan, :tanh,
-          :ceil, :floor, :trunc, :round,)
+          :round,)
    @eval Base.Math.$F(x::FloatD64) = FloatD64($F(Float128(x)))
 end
 
