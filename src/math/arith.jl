@@ -27,7 +27,7 @@ end
 # Algorithm 12 from [Joldes, Muller, Popescu 2017]
 function Base.:(*)(x::FloatD64, y::FloatD64)
     hi, lo = two_prod(Hi(x), Hi(y))
-    t = mul(Lo(x), Lo(y))
+    t = Lo(x) * Lo(y)
     t = fma(Hi(x), Lo(y), t)
     t = fma(Lo(x), Hi(y), t)
     t = lo + t
