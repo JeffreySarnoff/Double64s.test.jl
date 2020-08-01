@@ -1,7 +1,7 @@
 Base.:(-)(x::FloatD64) = FloatD64((-Hi(x), -Lo(x)))
 Base.:(-)(x::ComplexD64) = ComplexD64((-Hi(x), -Lo(x)))
 
-# relative error < 3u², 20 FP Ops
+# relative error < 3u², 20 FP Ops, 102.4 bits (relative)
 # Algorithm 6 from [Joldes, Muller, Popescu 2017]
 function Base.:(+)(x::FloatD64, y::FloatD64)
     hi, lo   = two_sum(Hi(x), Hi(y))
@@ -13,7 +13,7 @@ function Base.:(+)(x::FloatD64, y::FloatD64)
     return FloatD64((hi, lo))
 end
 
-# relative error < 3u², 20 FP Ops
+# relative error < 3u², 20 FP Ops, 102.4 bits (relative)
 # Algorithm 6 from [Joldes, Muller, Popescu 2017]
 # reworked for subtraction
 function Base.:(-)(x::FloatD64, y::FloatD64)
@@ -26,7 +26,7 @@ function Base.:(-)(x::FloatD64, y::FloatD64)
     return FloatD64((hi, lo))
 end
 
-# relative error < 5u², 9 FP Ops
+# relative error < 5u², 9 FP Ops, 101.6 bits (relative)
 # Algorithm 12 from [Joldes, Muller, Popescu 2017]
 function Base.:(*)(x::FloatD64, y::FloatD64)
     hi, lo = two_prod(Hi(x), Hi(y))
@@ -38,7 +38,7 @@ function Base.:(*)(x::FloatD64, y::FloatD64)
     return FloatD64((hi, lo))
 end
 
-# relative error < 9.8u², 31 FP Ops
+# relative error < 9.8u², 31 FP Ops, 100.7 bits (relative)
 # Algorithm 18 from [Joldes, Muller, Popescu 2017] 
 function Base.:(/)(x::FloatD64, y::FloatD64)
     negihi = -inv(Hi(y))
@@ -54,7 +54,7 @@ function Base.:(/)(x::FloatD64, y::FloatD64)
     return FloatD64((hi, lo))
 end
 
-# relative error < 9.8u², 31 FP Ops
+# relative error < 9.8u², 31 FP Ops, 100.7 bits (relative)
 # Algorithm 18 from [Joldes, Muller, Popescu 2017] 
 function Base.:(inv)(y::FloatD64)
     negihi = -inv(Hi(y))
