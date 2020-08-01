@@ -20,11 +20,11 @@ for T in (:HiLoF64, :HiLoC64)
 end
 
 struct FloatD64 <: Real
-    val::HiLoF64
+    val::Tuple{Float64, Float64}
 end
 
 struct ComplexD64 <: Number
-    val::HiLoC64
+    val::Tuple{Complex{Float64}, Complex{Float64}}
 end
 
 const FloatComplexD64 = Union{FloatD64, ComplexD64}
