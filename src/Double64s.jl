@@ -40,6 +40,8 @@ Union of FloatD64 and ComplexD64 types.
    hilo(x)
 
 Unwraps the two tuple: (most significant part, least significant part).
+
+see: [`hi`](@ref), [`lo`](@ref)
 """ hilo
 
 """
@@ -47,7 +49,7 @@ Unwraps the two tuple: (most significant part, least significant part).
 
 Unwraps the most significant part.
 
-[`lo`](@ref), [`hilo`](@ref)
+see: [`lo`](@ref), [`hilo`](@ref)
 """ hi
 
 """
@@ -55,7 +57,7 @@ Unwraps the most significant part.
 
 Unwraps the least signficant part.
 
-[`hi`](@ref), [`hilo`](@ref)
+see: [`hi`](@ref), [`hilo`](@ref)
 """ lo
 
 include("types/double64.jl")
