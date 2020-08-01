@@ -1,3 +1,9 @@
+Base.signbit(x::FloatD64) = signbit(Hi(x))
+Base.sign(x::FloatD64) = sign(Hi(x))
+signs(x::FloatD64) = (sign(Hi(x), sign(Lo(x)))
+Base.significand(x::FloatD64) = (significand(Hi(x)), significand(Lo(x)))
+Base.exponent(x::FloatD64) = (exponent(Hi(x)), exponent(Lo(x)))
+
 Base.:(-)(x::FloatD64) = FloatD64((-Hi(x), -Lo(x)))
 Base.abs(x::FloatD64) = signbit(x) ? -x : x
 Base.abs2(x::FloatD64) = x*x
