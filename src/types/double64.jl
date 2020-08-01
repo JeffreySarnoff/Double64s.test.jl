@@ -16,11 +16,11 @@ for T in (:FloatD64, :ComplexD64)
   end
 end
 
-real(x::FloatD64) = x
-imag(x::FloatD64) = FloatD64((0.0, 0.0))
+Base.real(x::FloatD64) = x
+Base.imag(x::FloatD64) = FloatD64((0.0, 0.0))
 
-real(x::ComplexD64) = FloatD64((real(hi(x)), real(lo(x))))
-imag(x::ComplexD64) = FloatD64((imag(hi(x)), imag(lo(x))))
+Base.real(x::ComplexD64) = FloatD64((real(hi(x)), real(lo(x))))
+Base.imag(x::ComplexD64) = FloatD64((imag(hi(x)), imag(lo(x))))
 
 Hi(x::Float64) = x
 Lo(x::Float64) = 0.0
