@@ -12,11 +12,14 @@ function Base.ldexp(x::Tuple{Tuple{Float64,Int64},Tuple{Float64,Int64}})
     return FloatD64((hi, lo))
 end
             
+Base.copysign(x::FloatD64, y) = signbit(y) ? -abs(x) : abs(x)
+Base.flipsign(x::FloatD64, y) = signbit(y) ? -x : x
+
 Base.:(-)(x::FloatD64) = FloatD64((-Hi(x), -Lo(x)))
 Base.abs(x::FloatD64) = signbit(x) ? -x : x
 Base.abs2(x::FloatD64) = x*x
-Base.copysign(x::FloatD64, y) = signbit(y) ? -abs(x) : abs(x)
-Base.flipsign(x::FloatD64, y) = signbit(y) ? -x : x
+
+Base.:(-)(x::ComplexD64) = ComplexD64((-Hi(x), -Lo(x)))
 
 function Base.ceil(x::FloatD64)
     xhi = Hi(x)
