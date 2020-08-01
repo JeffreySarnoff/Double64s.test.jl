@@ -63,6 +63,8 @@ see: [`Hi`](@ref), [`HiLo`](@ref)
 
 include("types/double64.jl")
 include("types/constructors.jl")
+include("types/comparison.jl")
+include("types/promotion.jl")
 
 include("math/prearith.jl")
 include("math/arith.jl")
