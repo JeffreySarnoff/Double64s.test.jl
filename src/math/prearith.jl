@@ -1,7 +1,7 @@
 Base.signbit(x::FloatD64) = signbit(Hi(x))
-signbits(x::FloatD64) = (signbit(Hi(x), signbit(Lo(x)))
+signbits(x::FloatD64) = (signbit(Hi(x), signbit(Lo(x))))
 Base.sign(x::FloatD64) = sign(Hi(x))
-signs(x::FloatD64) = (sign(Hi(x), sign(Lo(x)))
+signs(x::FloatD64) = (sign(Hi(x), sign(Lo(x))))
 Base.significand(x::FloatD64) = (significand(Hi(x)), significand(Lo(x)))
 Base.exponent(x::FloatD64) = (exponent(Hi(x)), exponent(Lo(x)))
         
