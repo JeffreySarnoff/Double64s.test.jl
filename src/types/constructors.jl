@@ -15,7 +15,7 @@ ComplexD64(x::Float64) = ComplexD64((ComplexF64(x), zero(ComplexF64)))
 ComplexD64(x::Float64, y::Float64) = ComplexD64((ComplexF64(x), ComplexF64(y)))
 
 ComplexD64(x::FloatD64) = ComplexD64((x, 0.0))
-ComplexD64(re::FloatD64, im::FloatD64) = ComplexD64((re, im))
+ComplexD64(re::FloatD64, im::FloatD64) = ComplexD64((ComplexF64(Hi(re), Hi(im)), ComplexF64(Lo(re), Lo(im))))
 
 ComplexD64(x::ComplexF64) = ComplexD64((x, 0.0+0.0im))
 ComplexD64(x::ComplexF64, y::ComplexF64) = ComplexD64(two_sum(x, y))
