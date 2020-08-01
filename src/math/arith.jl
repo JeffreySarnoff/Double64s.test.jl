@@ -114,3 +114,100 @@ function Base.:(*)(x::ComplexD64, y::ComplexD64)
     lo = ComplexF64(Lo(re), Lo(im))
     return ComplexD64((hi, lo))
 end
+
+#=
+   This is adapted from
+   "Improved Complex Division"
+    by Michael Baudin (DIGITEO) and Robert Smith (Stanford University)
+    Version 0.1. February 2011
+=#
+function Base.:(/)(x::ComplexD64, y::ComplexD64)
+    a = real(x); b = imag(x); c = real(y); d = imag(y)
+    if ( abs(d) <= abs(c) ) then
+        r = d/c
+        t = 1/fma(d, r, c)
+        if (r == 0) then
+            e = muladd( d, b/c, a) * t # (a + d * (b/c)) * t
+            f = muladd(-d, a/c, b) * t # (b - d * (a/c)) * t
+        else
+            e = muladd( b, r, a) * t # (a + b * r) * t
+            f = muladd(-a, r, b) * t # (b - a * r) * t
+        end
+    else
+        r = c/d
+        t = inv(muladd(c, r, d)) # 1/(c * r + d )
+        if (r == 0) then
+            e = muladd(c, a/d,  b) * t # (c * (a/d) + b) * t
+            f = muladd(c, b/d, -a) * t # (c * (b/d) - a) * t
+        else
+            e = muladd(a, r,  b) * t # (a * r + b) * t
+            f = muladd(b, r, -a) * t #(b * r - a) * t
+        end
+    end
+    hi = ComplexF64(Hi(e), Hi(f)) 
+    lo = ComplexF64(Lo(e), Lo(f))
+    return ComplexD64((hi, lo))
+end
+
+function Base.:(/)(x::ComplexD64, y::ComplexD64)
+    a = real(x); b = imag(x); c = real(y); d = imag(y)
+    if ( abs(d) <= abs(c) ) then
+        r = d/c
+        t = 1/fma(d, r, c)
+        if (r == 0) then
+            d = d * t
+            e = muladd( d, b/c, a) # (a + d * (b/c)) * t
+            f = muladd(-d, a/c, b) # (b - d * (a/c)) * t
+        else
+            b = b * t
+            a = a * t
+            e = muladd( b, r, a) # (a + b * r) * t
+            f = muladd(-a, r, b) # (b - a * r) * t
+        end
+    else
+        r = c/d
+        t = inv(muladd(c, r, d)) # 1/(c * r + d )
+        if (r == 0) then
+            e = muladd(c, a/d,  b) * t # (c * (a/d) + b) * t
+            f = muladd(c, b/d, -a) * t # (c * (b/d) - a) * t
+        else
+            e = muladd(a, r,  b) * t # (a * r + b) * t
+            f = muladd(b, r, -a) * t #(b * r - a) * t
+        end
+    end
+    hi = ComplexF64(Hi(e), Hi(f)) 
+    lo = ComplexF64(Lo(e), Lo(f))
+    return ComplexD64((hi, lo))
+end
+
+
+function Base.:(/)(x::ComplexD64, y::ComplexD64)
+    a = real(x); b = imag(x); c = real(y); d = imag(y)
+    if ( abs(d) <= abs(c) ) then
+        r = d/c
+        t = 1/fma(d, r, c)
+        if (r == 0) then
+            d = d * t
+            e = muladd( d, b/c, a) # (a + d * (b/c)) * t
+            f = muladd(-d, a/c, b) # (b - d * (a/c)) * t
+        else
+            b = b * t
+            a = a * t
+            e = muladd( b, r, a) # (a + b * r) * t
+            f = muladd(-a, r, b) # (b - a * r) * t
+        end
+    else
+        r = c/d
+        t = inv(muladd(c, r, d)) # 1/(c * r + d )
+        if (r == 0) then
+            e = muladd(c, a/d,  b) * t # (c * (a/d) + b) * t
+            f = muladd(c, b/d, -a) * t # (c * (b/d) - a) * t
+        else
+            e = muladd(a, r,  b) * t # (a * r + b) * t
+            f = muladd(b, r, -a) * t #(b * r - a) * t
+        end
+    end
+    hi = ComplexF64(Hi(e), Hi(f)) 
+    lo = ComplexF64(Lo(e), Lo(f))
+    return ComplexD64((hi, lo))
+end
