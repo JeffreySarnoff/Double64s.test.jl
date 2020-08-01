@@ -23,7 +23,7 @@ Also the constructor for that struct.
 """ FloatD64
 
 """
-    ComplexD64 <: Complex
+    ComplexD64
 
 A struct wrapping a Tuple of two Complex{Float64}s: (most significant part, least significant part).
 
