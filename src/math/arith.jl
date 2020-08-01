@@ -1,6 +1,3 @@
-Base.:(-)(x::FloatD64) = FloatD64((-Hi(x), -Lo(x)))
-Base.:(-)(x::ComplexD64) = ComplexD64((-Hi(x), -Lo(x)))
-
 # relative error < 3u², 20 FP Ops, 102.4 bits (relative)
 # Algorithm 6 from [Joldes, Muller, Popescu 2017]
 function Base.:(+)(x::FloatD64, y::FloatD64)
