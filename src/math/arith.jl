@@ -3,9 +3,9 @@
 function Base.:(+)(x::FloatD64, y::FloatD64)
     hi, lo   = two_sum(Hi(x), Hi(y))
     thi, tlo = two_sum(Lo(x), Lo(y))
-    c = add(lo, thi)
+    c = lo + thi
     hi, lo = two_hilo_sum(hi, c)
-    c = add(tlo, lo)
+    c = tlo + lo
     hi, lo = two_hilo_sum(hi, c)
     return FloatD64((hi, lo))
 end
@@ -16,9 +16,9 @@ end
 function Base.:(-)(x::FloatD64, y::FloatD64)
     hi, lo   = two_diff(Hi(x), Hi(y))
     thi, tlo = two_diff(Lo(x), Lo(y))
-    c = add(lo, thi)
+    c = lo + thi
     hi, lo = two_hilo_sum(hi, c)
-    c = add(tlo, lo)
+    c = tlo + lo
     hi, lo = two_hilo_sum(hi, c)
     return FloatD64((hi, lo))
 end
@@ -30,7 +30,7 @@ function Base.:(*)(x::FloatD64, y::FloatD64)
     t = mul(Lo(x), Lo(y))
     t = fma(Hi(x), Lo(y), t)
     t = fma(Lo(x), Hi(y), t)
-    t = add(lo, t)
+    t = lo + t
     hi, lo = two_hilo_sum(hi, t)
     return FloatD64((hi, lo))
 end
