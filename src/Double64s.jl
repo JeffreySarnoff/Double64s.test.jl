@@ -3,12 +3,12 @@
 
 exported types: [`FloatD64`](@ref), [`ComplexD64`](@ref), [`FloatComplexD64`](@ref)
 
-exported field accessors: [`hi`](@ref), [`lo`](@ref), [`hilo`](@ref)
+exported field accessors: [`Hi`](@ref), [`Lo`](@ref), [`HiLo`](@ref)
 """
 module Double64s
 
 export FloatD64, ComplexD64, FloatComplexD64,
-  hi, lo, hilo
+  Hi, Lo, HiLo
 
 using ErrorfreeArithmetic, Quadmath
 
@@ -37,28 +37,28 @@ Union of FloatD64 and ComplexD64 types.
 """ FloatComplexD64
 
 """
-   hilo(x)
+   HiLo(x)
 
 Unwraps the two tuple: (most significant part, least significant part).
 
-see: [`hi`](@ref), [`lo`](@ref)
-""" hilo
+see: [`Hi`](@ref), [`Lo`](@ref)
+""" HiLo
 
 """
-   hi(x)
+   Hi(x)
 
 Unwraps the most significant part.
 
-see: [`lo`](@ref), [`hilo`](@ref)
-""" hi
+see: [`Lo`](@ref), [`HiLo`](@ref)
+""" Hi
 
 """
-   lo(x)
+   Lo(x)
 
 Unwraps the least signficant part.
 
-see: [`hi`](@ref), [`hilo`](@ref)
-""" lo
+see: [`Hi`](@ref), [`HiLo`](@ref)
+""" Lo
 
 include("types/double64.jl")
 include("types/constructors.jl")
