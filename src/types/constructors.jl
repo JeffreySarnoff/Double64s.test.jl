@@ -1,3 +1,22 @@
+FloatD64(x::Float64) = FloatD64((x, 0.0))
+FloatD64(x::T) where {T<:Union{Float32, Float16, Int32, Int16, Int8}} = FloatD64(Float64(x))
+
+function FloatD64(x::T) where {T<:Union{Int64,Int128}}
+    if abs(x) <= maxintfloat(Float64)
+        FloatD64(Float64(x))
+    else
+        a = copysign(9007199254740992, x)
+        b = (x - a)
+        c = Float64(a)
+        d = Float64(b)
+        if abs(c) > abs(d)
+            Float64(c, d)
+        else
+            Float64(d, c)
+        end
+    end
+end
+
 TwoF64(x::Float64) = (x, 0.0)
 TwoF64(x::Float64, y::Float64) = (x, y)
 
