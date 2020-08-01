@@ -1,24 +1,3 @@
-const HiLoF64 = NTuple{2, Float64}
-const HiLoC64 = NTuple{2, Complex{Float64}}
-
-HiLoF64(x::Float64) = (x, 0.0)
-HiLoF64(hi::Float64, lo::Float64) = (hi, lo)
-HiLoF64(x::Complex{Float64}) = (real(x), 0.0)
-HiLoF64(hi::Complex{Float64}, lo::Complex{Float64}) = (real(hi), real(lo))
-
-HiLoC64(x::Float64) = (Complex{Float64}(x), 0.0+0.0im)
-HiLoC64(hi::Float64, lo::Float64) = (Complex{Float64}(hi), Complex{Float64}(lo))
-HiLoC64(x::Complex{Float64}) = (x, 0.0+0.0im)
-HiLoC64(hi::Complex{Float64}, lo::Complex{Float64}) = (hi, lo)
-
-for T in (:HiLoF64, :HiLoC64)
-  @eval begin
-    hi(x::$T) = x[1]
-    lo(x::$T) = x[2]
-    hilo(x::$T) = x
-  end
-end
-
 struct FloatD64 <: Real
     val::Tuple{Float64, Float64}
 end
@@ -38,10 +17,10 @@ for T in (:FloatD64, :ComplexD64)
 end
 
 real(x::FloatD64) = x
-imag(x::FloatD64) = FloatD64(0.0, 0.0)
+imag(x::FloatD64) = FloatD64((0.0, 0.0))
 
-real(x::ComplexD64) = FloatD64(real(hi(x)), real(lo(x)))
-imag(x::ComplexD64) = FloatD64(imag(hi(x)), imag(lo(x)))
+real(x::ComplexD64) = FloatD64((real(hi(x)), real(lo(x))))
+imag(x::ComplexD64) = FloatD64((imag(hi(x)), imag(lo(x))))
 
 hireal(x::ComplexD64) = real(hi(x))
 loreal(x::ComplexD64) = real(lo(x))
