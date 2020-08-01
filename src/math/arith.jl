@@ -106,3 +106,11 @@ function Base.:(-)(x::ComplexD64, y::ComplexD64)
     return ComplexD64((hi, lo))
 end
 
+function Base.:(*)(x::ComplexD64, y::ComplexD64)
+    xr = real(x); xi = imag(x); yr = real(y); yi = imag(y)
+    re = xr * yr - xi * yi
+    im = xr * yi + xi * yr
+    hi = ComplexF64(Hi(re), Hi(im))
+    lo = ComplexF64(Lo(re), Lo(im))
+    return ComplexD64((hi, lo))
+end
