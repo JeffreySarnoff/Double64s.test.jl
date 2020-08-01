@@ -8,14 +8,6 @@ end
 
 const FloatComplexD64 = Union{FloatD64, ComplexD64}
 
-for T in (:FloatD64, :ComplexD64)
-  @eval begin
-    Hi(x::$T) = x.val[1]
-    Lo(x::$T) = x.val[2]
-    HiLo(x::$T) = x.val
-  end
-end
-
 Hi(x::Float64) = x
 Lo(x::Float64) = 0.0
 HiLo(x::Float64) = (x, 0.0)
