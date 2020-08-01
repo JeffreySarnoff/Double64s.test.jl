@@ -5,15 +5,7 @@ function FloatD64(x::T) where {T<:Union{Int64,Int128}}
     if abs(x) <= maxintfloat(Float64)
         FloatD64(Float64(x))
     else
-        a = copysign(9007199254740992, x)
-        b = (x - a)
-        c = Float64(a)
-        d = Float64(b)
-        if abs(c) > abs(d)
-            Float64(c, d)
-        else
-            Float64(d, c)
-        end
+        throw(InexactError(:FloatD64, Float64, x))
     end
 end
 
@@ -38,11 +30,16 @@ FloatD64(x::Float64, y::Float64) = FloatD64(two_sum(x, y))
 ComplexD64(x::ComplexF64) = ComplexD64((x, 0.0+0.0im))
 ComplexD64(x::ComplexF64, y::ComplexF64) = ComplexD64(two_sum(x, y))
 
+FloatD64(x::BigInt) = FloatD64(BigFloat(x))
 function FloatD64(x::BigFloat)
-    hi = Float64(x)
-    lo = Float64(x - hi)
-    return FloatD64((hi, lo))
-end
+   if abs(x) <= maxintfloat(Float64)
+        hi = Float64(x)
+        lo = Float64(x-hi)
+        FloatD64((hi, lo))
+    else
+        throw(InexactError(:FloatD64, Float64, x))
+    end
+end 
 
 function ComplexD64(x::Complex{BigFloat})
     hi = ComplexF64(x)
