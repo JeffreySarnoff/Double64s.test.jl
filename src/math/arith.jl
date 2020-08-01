@@ -5,7 +5,7 @@ sub(x::T, y::T) where {T<:Number} = x - y
 mul(x::T, y::T) where {T<:Number} = x * y
 divide(x::T, y::T) where {T<:Number} = x / y
 
-for T in (:Float64, :Complex{Float64})
+for T in (:Float64, :(Complex{Float64}))
   @eval begin
     add(x::$T, y::$T) = x + y
     sub(x::$T, y::$T) = x - y
@@ -14,7 +14,7 @@ for T in (:Float64, :Complex{Float64})
   end
 end
 
-for (T1,T2) in ((:Float64, :Complex{Float64}), (:Complex{Float64}, :Float64))
+for (T1,T2) in ((:Float64, :(Complex{Float64})), (:(Complex{Float64}), :Float64))
   @eval begin
     add(x::$T, y::$T) = add(promote(x, y)...)
     sub(x::$T, y::$T) = sub(promote(x, y)...)
