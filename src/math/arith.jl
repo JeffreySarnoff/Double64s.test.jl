@@ -89,3 +89,19 @@ function Base.:(inv)(y::FloatD64)
 end
 
 Base.:(\)(x::FloatD64, y::FloatD64) = (/)(y, x)
+
+
+function Base.:(+)(x::ComplexD64, y::ComplexD64)
+    hihi, hilo = two_sum(Hi(x), Hi(y))
+    lohi, lolo = two_sum(Lo(x), Lo(y))
+    hilo = (hilo - lohi) - lolo
+    return ComplexD64((hihi, hilo))
+end
+
+function Base.:(-)(x::ComplexD64, y::ComplexD64)
+    hihi, hilo = two_diff(Hi(x), Hi(y))
+    lohi, lolo = two_diff(Lo(x), Lo(y))
+    hilo = (hilo - lohi) - lolo
+    return ComplexD64((hihi, hilo))
+end
+
