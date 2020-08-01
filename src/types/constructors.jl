@@ -9,21 +9,6 @@ function FloatD64(x::T) where {T<:Union{Int64,Int128}}
     end
 end
 
-TwoF64(x::Float64) = (x, 0.0)
-TwoF64(x::Float64, y::Float64) = (x, y)
-
-TwoF64(x::ComplexF64, y::Float64) = (real(x), y)
-TwoF64(x::Float64, y::ComplexF64) = (x, real(y))
-Twof64(x::ComplexF64, y::ComplexF64) = (real(x), real(y))
-
-TwoC64(x::Float64) = (Complex{Float64}(x,0.0), Complex{Float64}(0.0,0.0))
-TwoC64(x::Float64, y::Float64) = (Complex{Float64}(x,0.0), Complex{Float64}(y,0.0))
-
-TwoC64(x::ComplexF64) = (x, Complex{Float64}(0.0,0.0))
-TwoC64(x::ComplexF64, y::ComplexF64) = (x, y)
-TwoC64(x::ComplexF64, y::Float64) = (x, Complex{Float64}(y,0.0))
-TwoC64(x::Float64, y::ComplexF64) = (Complex{Float64}(x,0.0), y)
-
 FloatD64(x::Float64) = FloatD64((x, 0.0))
 FloatD64(x::Float64, y::Float64) = FloatD64(two_sum(x, y))
 
