@@ -90,18 +90,19 @@ end
 
 Base.:(\)(x::FloatD64, y::FloatD64) = (/)(y, x)
 
-
 function Base.:(+)(x::ComplexD64, y::ComplexD64)
-    hihi, hilo = two_sum(Hi(x), Hi(y))
-    lohi, lolo = two_sum(Lo(x), Lo(y))
-    hilo = (hilo - lohi) - lolo
-    return ComplexD64((hihi, hilo))
+    re = real(x) + real(y)
+    im = imag(x) + imag(y)
+    hi = ComplexF64(Hi(re), Hi(im))
+    lo = ComplexF64(Lo(re), Lo(im))
+    return ComplexD64((hi, lo))
 end
 
 function Base.:(-)(x::ComplexD64, y::ComplexD64)
-    hihi, hilo = two_diff(Hi(x), Hi(y))
-    lohi, lolo = two_diff(Lo(x), Lo(y))
-    hilo = (hilo - lohi) - lolo
-    return ComplexD64((hihi, hilo))
+    re = real(x) - real(y)
+    im = imag(x) - imag(y)
+    hi = ComplexF64(Hi(re), Hi(im))
+    lo = ComplexF64(Lo(re), Lo(im))
+    return ComplexD64((hi, lo))
 end
 
