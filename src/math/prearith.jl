@@ -1,9 +1,17 @@
 Base.signbit(x::FloatD64) = signbit(Hi(x))
+signbits(x::FloatD64) = (signbit(Hi(x), signbit(Lo(x)))
 Base.sign(x::FloatD64) = sign(Hi(x))
 signs(x::FloatD64) = (sign(Hi(x), sign(Lo(x)))
 Base.significand(x::FloatD64) = (significand(Hi(x)), significand(Lo(x)))
 Base.exponent(x::FloatD64) = (exponent(Hi(x)), exponent(Lo(x)))
-
+        
+Base.frexp(x::FloatD64) = (frexp(Hi(x)), frexp(Lo(x)))
+function Base.ldexp(x::Tuple{Tuple{Float64,Int64},Tuple{Float64,Int64}})
+    hi = frexp(x[1]...)
+    lo = frexp(x[2]...)
+    return FloatD64((hi, lo))
+end
+            
 Base.:(-)(x::FloatD64) = FloatD64((-Hi(x), -Lo(x)))
 Base.abs(x::FloatD64) = signbit(x) ? -x : x
 Base.abs2(x::FloatD64) = x*x
