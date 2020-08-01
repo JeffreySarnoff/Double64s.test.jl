@@ -9,7 +9,6 @@ function FloatD64(x::T) where {T<:Union{Int64,Int128}}
     end
 end
 
-FloatD64(x::Float64) = FloatD64((x, 0.0))
 FloatD64(x::Float64, y::Float64) = FloatD64(two_sum(x, y))
 
 ComplexD64(x::Float64) = ComplexD64((ComplexF64(x), zero(ComplexF64)))
