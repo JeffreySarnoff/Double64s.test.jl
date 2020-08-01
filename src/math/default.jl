@@ -1,3 +1,4 @@
+#=
 for F in (:sqrt, :cbrt,
           :exp, :expm1, :log, :log10, :log1p, :log2,
           :acos, :acosh, :asin, :asinh, :atan, :atanh,
@@ -19,3 +20,4 @@ end
 
 Base.Math.modf(x::ComplexD64) = ComplexD64.(modf(Complex{Float128}(x)))
 Base.Math.hypot(x::ComplexD64, y::ComplexD64) = ComplexD64(hypot(Complex{Float128}(x), Complex{Float128}(y)))
+=#
