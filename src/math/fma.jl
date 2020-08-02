@@ -19,22 +19,8 @@ end
    return fma(Hi(x), Lo(x), Hi(y), Lo(y), Hi(z), Lo(z))
 end
 
-@inline function Base.fma(x::T, y::T, z::T) where {T<:ComplexD64}
-   return muladd(x, y, z)
-end
-
-@inline function Base.fma(x::T, y::T, z::T) where {T<:ComplexF64}
-   return muladd(x, y, z)
-end
-
-@inline function Base.muladd(x::T, y::T, z::T) where {T<:FloatD64}
-   return x*y + z
-end
-
-@inline function Base.muladd(x::T, y::T, z::T) where {T<:ComplexD64}
-   return x*y + z
-end
-
-@inline function Base.muladd(x::T, y::T, z::T) where {T<:ComplexF64}
-   return x*y + z
+for T in (:FloatD64, :ComplexD64)
+   @eval @inline function Base.muladd(x::$T, y::$T, z::$T)
+      return x*y + z
+   end
 end
