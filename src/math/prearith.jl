@@ -6,7 +6,7 @@ Base.significand(x::FloatD64) = (significand(Hi(x)), significand(Lo(x)))
 Base.exponent(x::FloatD64) = (exponent(Hi(x)), exponent(Lo(x)))
 
 significant_bits(::Type{Float64})  =  53
-significant_bits(::Type{Float6D4}) = 2*53
+significant_bits(::Type{FloatD64}) = 2*53
 
 
 Base.frexp(x::FloatD64) = (frexp(Hi(x)), frexp(Lo(x)))
@@ -101,7 +101,7 @@ function nearestint(x::T) where {T<:Union{Float64, FloatD64}}
 end
 
 function accurate_c1c2(value::Real, ::Type{T}, p=significant_bits(T)) where {T<:Real}
-    r1 = one(typeoof(value)) / value
+    r1 = one(typeof(value)) / value
     r = T(r1)
     ir = one(typeof(r)) / r
     irulp = T(4 * eps(ir))
