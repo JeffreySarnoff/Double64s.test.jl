@@ -1,6 +1,6 @@
 # relative error < 3u², 20 FP Ops, 102.4 bits (relative)
 # Algorithm 6 from [Joldes, Muller, Popescu 2017]
-function Base.:(+)(x::FloatD64, y::FloatD64)
+function Base.:(+)(x::FloatD64, y::FloatD64) 
     hi, lo   = two_sum(Hi(x), Hi(y))
     thi, tlo = two_sum(Lo(x), Lo(y))
     c = lo + thi
@@ -9,6 +9,21 @@ function Base.:(+)(x::FloatD64, y::FloatD64)
     hi, lo = two_hilo_sum(hi, c)
     return FloatD64((hi, lo))
 end
+
+function Base.:(+)(x::FloatD64, y::Float64) 
+    hi, lo   = two_sum(Hi(x), y)
+    c = lo + Lo(x)
+    hi, lo = two_hilo_sum(hi, c)
+    return FloatD64((hi, lo))
+end
+
+function Base.:(+)(x::Float64, y::FloatD64) 
+    hi, lo   = two_sum(x, Hi(y))
+    c = lo + Lo(y)
+    hi, lo = two_hilo_sum(hi, c)
+    return FloatD64((hi, lo))
+end
+
 
 # relative error < 3u², 20 FP Ops, 102.4 bits (relative)
 # Algorithm 6 from [Joldes, Muller, Popescu 2017]
