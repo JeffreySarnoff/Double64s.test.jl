@@ -11,14 +11,14 @@ function Base.:(+)(x::FloatD64, y::FloatD64)
 end
 
 function Base.:(+)(x::FloatD64, y::Float64) 
-    hi, lo   = two_sum(Hi(x), y)
+    hi, lo = two_sum(Hi(x), y)
     c = lo + Lo(x)
     hi, lo = two_hilo_sum(hi, c)
     return FloatD64((hi, lo))
 end
 
 function Base.:(+)(x::Float64, y::FloatD64) 
-    hi, lo   = two_sum(x, Hi(y))
+    hi, lo = two_sum(x, Hi(y))
     c = lo + Lo(y)
     hi, lo = two_hilo_sum(hi, c)
     return FloatD64((hi, lo))
