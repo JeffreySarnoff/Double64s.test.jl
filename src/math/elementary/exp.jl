@@ -1117,3 +1117,8 @@ expi = [
 2.7076842519337899498539703405097468565320357
 ]
 =#
+
+#=
+   function exp(x)
+      signbit(x) && return inv(exp(abs(x))
+=#
