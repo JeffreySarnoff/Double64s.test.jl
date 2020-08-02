@@ -4,7 +4,11 @@ Base.sign(x::FloatD64) = sign(Hi(x))
 signs(x::FloatD64) = (sign(Hi(x), sign(Lo(x))))
 Base.significand(x::FloatD64) = (significand(Hi(x)), significand(Lo(x)))
 Base.exponent(x::FloatD64) = (exponent(Hi(x)), exponent(Lo(x)))
-        
+
+significant_bits(::Type{Float64})  =  53
+significant_bits(::Type{Float6D4}) = 2*53
+
+
 Base.frexp(x::FloatD64) = (frexp(Hi(x)), frexp(Lo(x)))
 function Base.ldexp(x::Tuple{Tuple{Float64,Int64},Tuple{Float64,Int64}})
     hi = frexp(x[1]...)
@@ -95,3 +99,14 @@ function nearestint(x::T) where {T<:Union{Float64, FloatD64}}
     absx = trunc(absx)
     return s ? -absx : absx
 end
+
+function accurate_c1c2(value::Real, ::Type{T}, p=significant_bits(T)) where {T<:Real}
+    r1 = one(typeoof(value)) / value
+    r = T(r1)
+    ir = one(typeof(r)) / r
+    irulp = 4 * eps(ir)
+    c1 = nearestint(inv(r * irulp))
+    c1 = c1 * irulp
+    p2 = 2.0^(-p+4)
+        
+        
