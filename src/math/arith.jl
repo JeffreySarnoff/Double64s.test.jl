@@ -144,7 +144,7 @@ function Base.:(/)(x::ComplexD64, y::ComplexD64)
     else
         r = c/d
         t = inv(fma(c, r, d)) # 1/(c * r + d )
-        if (r == 0) then
+        if r == 0
             e = fma(c, a/d,  b) * t # (c * (a/d) + b) * t
             f = fma(c, b/d, -a) * t # (c * (b/d) - a) * t
         else
@@ -163,7 +163,7 @@ function divide(x::ComplexD64, y::ComplexD64)
     if abs(d) <= abs(c)
         r = d/c
         t = inv(muladd(d, r, c))
-        if (r == 0) then
+        if r == 0
             d = d * t
             e = muladd( d, b/c, a) # (a + d * (b/c)) * t
             f = muladd(-d, a/c, b) # (b - d * (a/c)) * t
@@ -176,7 +176,7 @@ function divide(x::ComplexD64, y::ComplexD64)
     else
         r = c/d
         t = inv(muladd(c, r, d)) # 1/(c * r + d )
-        if (r == 0) then
+        if r == 0
             e = muladd(c, a/d,  b) * t # (c * (a/d) + b) * t
             f = muladd(c, b/d, -a) * t # (c * (b/d) - a) * t
         else
