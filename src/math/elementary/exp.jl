@@ -27,7 +27,7 @@ julia> 2.0^(-9) = 0.001953125
       this achieves r halvings of argument reduction for the cost of a multiplication
 
 
-sum([x^k / factorial(k) for k=0:n])
+sum([x^k / factorial(k) for k=0:n]) # perhaps 11
 ex2(x,n) = sum([(x^(2*k) * (1 + 2*k +x)) / factorial(1+2*k) for k=0:n])  # 5 perhaps 6
 
 =#
