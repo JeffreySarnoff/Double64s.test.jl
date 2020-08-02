@@ -25,6 +25,11 @@
 
 =#
 #=
+ir(r) = collect(0:(2^r - 1));
+ir2(r1,r2) = collect((2^r1):(2^r2 - 1))
+exps(r) = exp.(ir(r) / big"2"^r)
+exps2(r1,r2) = exp.(ir2(r1,r2) / big"2"^r2)
+
 # 256 values
 expi = [
 big"1.0",
