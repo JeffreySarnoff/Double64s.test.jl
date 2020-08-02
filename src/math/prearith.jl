@@ -18,8 +18,12 @@ Base.flipsign(x::FloatD64, y) = signbit(y) ? -x : x
 Base.:(-)(x::FloatD64) = FloatD64((-Hi(x), -Lo(x)))
 Base.abs(x::FloatD64) = signbit(x) ? -x : x
 Base.abs2(x::FloatD64) = x*x
+fastabs(x::FloatD64) = abs(Hi(x))
+fastabs2(x::FloatD64) = abs2(Hi(x))
 
 Base.:(-)(x::ComplexD64) = ComplexD64((-Hi(x), -Lo(x)))
+fastabs(x::ComplexD64) = abs(Hi(x))
+fastabs2(x::ComplexD64) = abs2(Hi(x))
 
 function Base.ceil(x::FloatD64)
     xhi = Hi(x)
