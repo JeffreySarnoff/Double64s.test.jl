@@ -14,7 +14,7 @@
    t = x - m * log(2)
 
    exp(x) = exp(t) * (2.0^m)
-            where t  in [0, log(2))
+            where t  in [0, log(2)) # log(2) ~0.6931471805599453
 
    exp(t) = (exp(t/(2.0^r)))^(2.0^r)
             where t/(2.0^r) in [0, 2.0^(-r))   # at the expense of r squarings
@@ -29,6 +29,16 @@ ir(r) = collect(0:(2^r - 1));
 ir2(r1,r2) = collect((2^r1):(2^r2 - 1))
 exps(r) = exp.(ir(r) / big"2"^r)
 exps2(r1,r2) = exp.(ir2(r1,r2) / big"2"^r2)
+
+expi1 = exps(8);
+expi2 = exps2(8,9);
+expi1s = expi1[1:128]; # length 128
+expi2s = expi2; # leingth 256
+
+expi1s[1],expi1s[end]
+(1.0, 1.642293515618909941146175177943829065898476010090130767464052857406618001282157)
+expi2s[1],expi2s[end]
+(1.648721270700128146848650787814163571653776100710148011575079311640661021194214, 2.712977865600149830047947983547967696224441828481010944922219814560357243651112)
 
 # 256 values
 expi = [
