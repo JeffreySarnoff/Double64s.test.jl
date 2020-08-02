@@ -104,9 +104,15 @@ function accurate_c1c2(value::Real, ::Type{T}, p=significant_bits(T)) where {T<:
     r1 = one(typeoof(value)) / value
     r = T(r1)
     ir = one(typeof(r)) / r
-    irulp = 4 * eps(ir)
-    c1 = nearestint(inv(r * irulp))
-    c1 = c1 * irulp
-    p2 = 2.0^(-p+4)
-        
+    irulp = T(4 * eps(ir))
+    c1a = nearestint(inv(r * irulp))
+    c1 = T(c1a * irulp)
+    p2 = T(2.0)^(-p+4)
+    scaledulp = T(p2 * eps(c1))
+    c2a = nearestint( (value - c1) / scaledulp )
+    c2 = T(c2a * scaledulp)
+    return c1, c2
+end
+
+    
         
