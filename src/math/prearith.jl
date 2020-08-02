@@ -22,7 +22,11 @@ end
 
 #=
     num, xp2, den = Base.decompose(x)
-    BigFloat(x) == ldexp(BigFloat(num)/den, xp2)
+    if isone(den)
+       BigFloat(x) == ldexp(BigFloat(num), xp2)
+    else
+       BigFloat(x) == ldexp(BigFloat(num), xp2) / den
+    end
 =#
 function Base.decompose(x::FloatD64)
     nt_hi, ex_hi = ntexp(Hi(x))
