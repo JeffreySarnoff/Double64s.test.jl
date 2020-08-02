@@ -82,5 +82,6 @@ include("types/promotion.jl")
 include("math/prearith.jl")
 include("math/arith.jl")
 include("math/fma.jl")
+include("math/roots.jl")
 
 end  # Double64s
