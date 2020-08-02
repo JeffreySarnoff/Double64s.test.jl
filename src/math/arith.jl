@@ -128,9 +128,9 @@ end
 
 function Base.:(/)(x::ComplexD64, y::ComplexD64)
     a = real(x); b = imag(x); c = real(y); d = imag(y)
-    if ( abs(d) <= abs(c) ) then
+    if abs(d) <= abs(c)
         r = d/c
-        t = 1/fma(d, r, c)
+        t = inv(fma(d, r, c))
         if (r == 0) then
             d = d * t
             e = fma( d, b/c, a) # (a + d * (b/c)) * t
