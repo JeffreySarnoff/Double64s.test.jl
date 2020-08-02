@@ -160,9 +160,9 @@ end
 
 function divide(x::ComplexD64, y::ComplexD64)
     a = real(x); b = imag(x); c = real(y); d = imag(y)
-    if ( abs(d) <= abs(c) ) then
+    if abs(d) <= abs(c)
         r = d/c
-        t = 1/fma(d, r, c)
+        t = inv(muladd(d, r, c))
         if (r == 0) then
             d = d * t
             e = muladd( d, b/c, a) # (a + d * (b/c)) * t
