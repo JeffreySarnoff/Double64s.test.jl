@@ -26,6 +26,10 @@ julia> 2.0^(-9) = 0.001953125
       we can write exp(x) = exp(x - i/2^r) * exp(i/2^r)  wher i = floor(x * 2^r)
       this achieves r halvings of argument reduction for the cost of a multiplication
 
+
+sum([x^k / factorial(k) for k=0:n])
+ex2(x,n) = sum([(x^(2*k) * (1 + 2*k +x)) / factorial(1+2*k) for k=0:n])  # 5 perhaps 6
+
 =#
 #=
 ir(r) = collect(0:(2^r - 1));
