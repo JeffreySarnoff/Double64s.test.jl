@@ -185,7 +185,9 @@ for (T1, T2) in ((:ComplexD64, :ComplexD64), (:ComplexD64, :ComplexF64), (:Compl
         lo = ComplexF64(Lo(re), Lo(im))
         return ComplexD64((hi, lo))
     end
+  end
 end
+
 #=
    This is adapted from
    "Improved Complex Division"
