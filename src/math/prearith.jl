@@ -38,8 +38,7 @@ function Base.decompose(x::FloatD64)
     nt_lo, ex_lo = ntexp(Lo(x))
     num = (nt_hi << abs(ex_hi-ex_lo)) + nt_lo
     xp2 = ex_lo
-    den = Int(1)
-    return num, xp2, den
+    return num, xp2, 1
 end
 
 Base.copysign(x::FloatD64, y) = signbit(y) ? -abs(x) : abs(x)
