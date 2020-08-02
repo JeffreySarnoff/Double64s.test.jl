@@ -155,32 +155,37 @@ function Base.:(inv)(y::FloatD64)
 end
 
 Base.:(\)(x::FloatD64, y::FloatD64) = (/)(y, x)
+Base.:(\)(x::FloatD64, y::Float64) = (/)(y, x)
+Base.:(\)(x::Float64, y::FloatD64) = (/)(y, x)
 
-function Base.:(+)(x::ComplexD64, y::ComplexD64)
-    re = real(x) + real(y)
-    im = imag(x) + imag(y)
-    hi = ComplexF64(Hi(re), Hi(im))
-    lo = ComplexF64(Lo(re), Lo(im))
-    return ComplexD64((hi, lo))
+for (T1, T2) in ((:ComplexD64, :ComplexD64), (:ComplexD64, :ComplexF64), (:ComplexF64, :ComplexD64))
+  @eval begin
+        
+    function Base.:(+)(x::$T1, y::$T2)
+        re = real(x) + real(y)
+        im = imag(x) + imag(y)
+        hi = ComplexF64(Hi(re), Hi(im))
+        lo = ComplexF64(Lo(re), Lo(im))
+        return ComplexD64((hi, lo))
+    end
+
+    function Base.:(-)(x::$T1, y::$T2)
+        re = real(x) - real(y)
+        im = imag(x) - imag(y)
+        hi = ComplexF64(Hi(re), Hi(im))
+        lo = ComplexF64(Lo(re), Lo(im))
+        return ComplexD64((hi, lo))
+    end
+
+    function Base.:(*)(x::$T1, y::$T2)
+        xr = real(x); xi = imag(x); yr = real(y); yi = imag(y)
+        re = xr * yr - xi * yi
+        im = xr * yi + xi * yr
+        hi = ComplexF64(Hi(re), Hi(im))
+        lo = ComplexF64(Lo(re), Lo(im))
+        return ComplexD64((hi, lo))
+    end
 end
-
-function Base.:(-)(x::ComplexD64, y::ComplexD64)
-    re = real(x) - real(y)
-    im = imag(x) - imag(y)
-    hi = ComplexF64(Hi(re), Hi(im))
-    lo = ComplexF64(Lo(re), Lo(im))
-    return ComplexD64((hi, lo))
-end
-
-function Base.:(*)(x::ComplexD64, y::ComplexD64)
-    xr = real(x); xi = imag(x); yr = real(y); yi = imag(y)
-    re = xr * yr - xi * yi
-    im = xr * yi + xi * yr
-    hi = ComplexF64(Hi(re), Hi(im))
-    lo = ComplexF64(Lo(re), Lo(im))
-    return ComplexD64((hi, lo))
-end
-
 #=
    This is adapted from
    "Improved Complex Division"
