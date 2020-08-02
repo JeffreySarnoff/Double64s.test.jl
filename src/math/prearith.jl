@@ -89,3 +89,9 @@ function Base.trunc(x::FloatD64)
     return signbit(x) ? ceil(x) : floor(x)
 end
 
+function nearestint(x::T) where {T<:Union{Float64, FloatD64}}
+    s, absx = signbit(x), abs(x)
+    absx = absx + 0.5
+    absx = trunc(absx)
+    return s ? -absx : absx
+end
