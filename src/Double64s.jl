@@ -9,7 +9,8 @@ module Double64s
 
 export FloatD64, ComplexD64, FloatComplexD64,
   Hi, Lo, HiLo,
-  signs, signbits
+  signs, signbits,
+  fastabs, fastabs2
 
 using ErrorfreeArithmetic, Quadmath
 
@@ -60,6 +61,18 @@ Unwraps the least signficant part.
 
 see: [`Hi`](@ref), [`HiLo`](@ref)
 """ Lo
+
+"""
+   fastabs(x)
+
+abs(Hi(x))
+""" fastabs
+
+"""
+   fastabs2(x)
+
+abs2(Hi(x))
+""" fastabs2
 
 include("types/double64.jl")
 include("types/constructors.jl")
