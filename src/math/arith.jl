@@ -38,6 +38,20 @@ function Base.:(-)(x::FloatD64, y::FloatD64)
     return FloatD64((hi, lo))
 end
 
+function Base.:(-)(x::FloatD64, y::Float64) 
+    hi, lo = two_diff(Hi(x), y)
+    c = lo + Lo(x)
+    hi, lo = two_hilo_sum(hi, c)
+    return FloatD64((hi, lo))
+end
+
+function Base.:(-)(x::Float64, y::FloatD64) 
+    hi, lo = two_diff(x, Hi(y))
+    c = lo + Lo(y)
+    hi, lo = two_hilo_sum(hi, c)
+    return FloatD64((hi, lo))
+end
+
 # relative error < 5u², 9 FP Ops, 101.6 bits (relative)
 # Algorithm 12 from [Joldes, Muller, Popescu 2017]
 function Base.:(*)(x::FloatD64, y::FloatD64)
@@ -45,6 +59,22 @@ function Base.:(*)(x::FloatD64, y::FloatD64)
     t = Lo(x) * Lo(y)
     t = fma(Hi(x), Lo(y), t)
     t = fma(Lo(x), Hi(y), t)
+    t = lo + t
+    hi, lo = two_hilo_sum(hi, t)
+    return FloatD64((hi, lo))
+end
+
+function Base.:(*)(x::FloatD64, y::Float64)
+    hi, lo = two_prod(Hi(x), y)
+    t = Lo(x) * y   
+    t = t + lo
+    hi, lo = two_hilo_sum(hi, t)
+    return FloatD64((hi, lo))
+end
+
+function Base.:(*)(x::Float64, y::FloatD64)
+    hi, lo = two_prod(x, Hi(y))
+    t = x * Lo(y)
     t = lo + t
     hi, lo = two_hilo_sum(hi, t)
     return FloatD64((hi, lo))
