@@ -8,7 +8,7 @@ exported field accessors: [`Hi`](@ref), [`Lo`](@ref), [`HiLo`](@ref)
 module Double64s
 
 export FloatD64, ComplexD64, FloatComplexD64,
-  Hi, Lo, HiLo,
+  Hi, Lo, HiLo, ReIm,
   signs, signbits,
   fastabs, fastabs2
 
@@ -61,6 +61,13 @@ Unwraps the least signficant part.
 
 see: [`Hi`](@ref), [`HiLo`](@ref)
 """ Lo
+
+"""
+   ReIm(x::Complex)
+
+Unwraps real(x) and imag(x).
+
+""" ReIm
 
 """
    fastabs(x)
