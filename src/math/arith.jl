@@ -120,6 +120,37 @@ end
    "Improved Complex Division"
     by Michael Baudin (DIGITEO) and Robert Smith (Stanford University)
     Version 0.1. February 2011
+    
+    "A Robust Complex Division in Scilab
+    by Michael Baudin, Robert L. Smith
+    2012
+
+function Base.:(/)( x, y )
+    a = real(x); b = imag(x)
+    c = real(y); d = imag(y)
+    if abs(d) <= abs(c)
+        e,f = improved_internal(a,b,c,d)
+    else
+        e,f = improved_internal(b,a,d,c)
+        f = -f
+    end
+    hi = ComplexF64(Hi(e), Hi(f)) 
+    lo = ComplexF64(Lo(e), Lo(f))
+    return ComplexD64((hi, lo))
+end
+
+function improved_internal(a,b,c,d)
+    r = d/c
+    t = 1/( c + d * r)
+    if !iszero(r)
+        e = (a + b * r) * t
+        f = (b - a * r) * t
+    else
+        e = (a + d * (b/c)) * t
+        f = (b - d * (a/c)) * t
+    end
+    return e, f
+end
 =#
 function Base.:(/)(x::ComplexD64, y::ComplexD64)
     a = real(x); b = imag(x); c = real(y); d = imag(y)
@@ -179,3 +210,35 @@ function Base.:(/)(x::ComplexD64, y::ComplexD64)
     lo = ComplexF64(Lo(e), Lo(f))
     return ComplexD64((hi, lo))
 end
+
+#=
+adapted from 
+On complex multiplication and division with an FMA
+Jean-Michel Muller, C.-P. Jeannerod, P. Kornerup and N. Louvet
+INVA 2014
+
+function mul(ab::ComplexD64, cd::ComplexD64)
+    re = Kahan(real(ab), real(cd), -imag(ab), imag(cd))
+    im = Kahan(real(ab), imag(cd), imag(ab), real(cd))
+    return ComplexD64((ComplexF64(Hi(re), Hi(im)), ComplexF64(Lo(re), Lo(im))))
+end
+
+function divide(ab::ComplexD64, cd::ComplexD64)
+    a = real(ab); b = imag(ab); c = real(cd); d = imag(cd)
+    delta = c*c + d*d
+    gre = Kahan(a, b,c,d) # ac + bd
+    gim = Kahan(b,-a,c,d) # bc - ad
+    qre = gre / delta
+    qim = gim / delta
+    return qre, qim
+end
+
+function Kahan(a, b, c, d)
+    w = c * d
+    e = fma(c, d, -w)
+    f = fma(a, b, w)
+    r = f + e
+    return r
+end
+
+Base.fma(x::FloatD64,y::FloatD64,z::FloatD64) = muladd(x,y,z)
