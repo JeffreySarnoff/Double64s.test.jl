@@ -20,6 +20,10 @@ function ntexp(x::Float64)
     return nt, ex
 end
 
+#=
+    num, xp2, den = Base.decompose(x)
+    BigFloat(x) == ldexp(BigFloat(num), xp2)
+=#
 function Base.decompose(x::FloatD64)
     nt_hi, ex_hi = ntexp(Hi(x))
     nt_lo, ex_lo = ntexp(Lo(x))
