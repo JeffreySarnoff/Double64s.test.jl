@@ -29,6 +29,11 @@ end
     end
 =#
 function Base.decompose(x::FloatD64)
+    hi = Hi(x)
+    isnan(hi)  && return 0, 0, 0
+    isinf(hi)  && return sign(x), 0, 0
+    iszero(hi) && return 0, 0, sign(x)
+
     nt_hi, ex_hi = ntexp(Hi(x))
     nt_lo, ex_lo = ntexp(Lo(x))
     num = (nt_hi << abs(ex_hi-ex_lo)) + nt_lo
