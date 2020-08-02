@@ -94,6 +94,27 @@ function Base.:(/)(x::FloatD64, y::FloatD64)
     return FloatD64(zh, zl)
 end
 
+function Base.:(/)(x::FloatD64, y::Float64)
+    th = inv(y)
+    rh = fma(-y, th, 1.0)
+    dh, dl = DWTimesFP3(rh, 0.0, th) # (eh, el) * rh
+    mh, ml = DWPlusFP(dh, dl, th) # (dh, dl) + th
+    zh, zl = DWTimesDW2(Hi(x), Lo(x), mh, ml) # (xh, xl) * (mh, ml)
+    return FloatD64(zh, zl)
+end
+
+function Base.:(/)(x::Float64, y::FloatD64)
+    yhi, ylo = HiLo(y)
+    th = inv(yhi)
+    rh = fma(-yhi, th, 1.0)
+    rl = -ylo * th
+    eh, el = two_hilo_sum(rh, rl)
+    dh, dl = DWTimesFP3(eh, el, th) # (eh, el) * rh
+    mh, ml = DWPlusFP(dh, dl, th) # (dh, dl) + th
+    zh, zl = DWTimesDW2(x, 0.0, mh, ml) # (xh, xl) * (mh, ml)
+    return FloatD64(zh, zl)
+end
+
 # algorithm 9 from [Joldes, Muller, Popescu 2017] 
 @inline function DWTimesFP3(xh, xl, y)
     ch, cl1 = two_prod(xh, y)
