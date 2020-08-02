@@ -221,3 +221,4 @@ function Kahan(a, b, c, d)
 end
 
 Base.fma(x::FloatD64,y::FloatD64,z::FloatD64) = muladd(x,y,z)
+=#
