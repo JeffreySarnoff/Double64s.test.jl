@@ -18,6 +18,9 @@
 
    exp(t) = (exp(t/(2.0^r)))^(2.0^r)
             where t/(2.0^r) in [0, 2.0^(-r))   # at the expense of r squarings
+                                
+julia> 2.0^(-8) = 0.00390625
+julia> 2.0^(-9) = 0.001953125
 
    if we precompute exp(i/(2^r)) for i = 0..(2^r - 1)
       we can write exp(x) = exp(x - i/2^r) * exp(i/2^r)  wher i = floor(x * 2^r)
