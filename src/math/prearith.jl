@@ -11,7 +11,24 @@ function Base.ldexp(x::Tuple{Tuple{Float64,Int64},Tuple{Float64,Int64}})
     lo = frexp(x[2]...)
     return FloatD64((hi, lo))
 end
-            
+
+# like frexp, returns an integer-valued significand
+function ntexp(x::Float64)
+    fr, ex = frexp(x)
+    nt = Int128(ldexp(fr, 53))
+    ex -= 53
+    return nt, ex
+end
+
+function Base.decompose(x::FloatD64)
+    nt_hi, ex_hi = ntexp(Hi(x))
+    nt_lo, ex_lo = ntexp(Lo(x))
+    num = (nt_hi << abs(ex_hi-ex_lo)) + nt_lo
+    xp2 = ex_lo
+    den = Int(1)
+    return num, xp2, den
+end
+
 Base.copysign(x::FloatD64, y) = signbit(y) ? -abs(x) : abs(x)
 Base.flipsign(x::FloatD64, y) = signbit(y) ? -x : x
 
