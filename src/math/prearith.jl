@@ -5,9 +5,10 @@ signs(x::FloatD64) = (sign(Hi(x), sign(Lo(x))))
 Base.significand(x::FloatD64) = (significand(Hi(x)), significand(Lo(x)))
 Base.exponent(x::FloatD64) = (exponent(Hi(x)), exponent(Lo(x)))
 
-significant_bits(::Type{Float64})  =  53
-significant_bits(::Type{FloatD64}) = 2*53
-
+significant_bits(::Type{Float64})    =   53
+significant_bits(::Type{FloatD64})   = 2*53
+significant_bits(::Type{ComplexF64}) =   53
+significant_bits(::Type{ComplexD64}) = 2*53
 
 Base.frexp(x::FloatD64) = (frexp(Hi(x)), frexp(Lo(x)))
 function Base.ldexp(x::Tuple{Tuple{Float64,Int64},Tuple{Float64,Int64}})
