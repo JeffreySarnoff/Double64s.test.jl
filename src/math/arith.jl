@@ -124,61 +124,7 @@ end
     "A Robust Complex Division in Scilab
     by Michael Baudin, Robert L. Smith
     2012
-
-function Base.:(/)( x, y )
-    a = real(x); b = imag(x)
-    c = real(y); d = imag(y)
-    if abs(d) <= abs(c)
-        e,f = improved_internal(a,b,c,d)
-    else
-        e,f = improved_internal(b,a,d,c)
-        f = -f
-    end
-    hi = ComplexF64(Hi(e), Hi(f)) 
-    lo = ComplexF64(Lo(e), Lo(f))
-    return ComplexD64((hi, lo))
-end
-
-function improved_internal(a,b,c,d)
-    r = d/c
-    t = 1/( c + d * r)
-    if !iszero(r)
-        e = (a + b * r) * t
-        f = (b - a * r) * t
-    else
-        e = (a + d * (b/c)) * t
-        f = (b - d * (a/c)) * t
-    end
-    return e, f
-end
 =#
-function Base.:(/)(x::ComplexD64, y::ComplexD64)
-    a = real(x); b = imag(x); c = real(y); d = imag(y)
-    if ( abs(d) <= abs(c) ) then
-        r = d/c
-        t = 1/fma(d, r, c)
-        if (r == 0) then
-            e = muladd( d, b/c, a) * t # (a + d * (b/c)) * t
-            f = muladd(-d, a/c, b) * t # (b - d * (a/c)) * t
-        else
-            e = muladd( b, r, a) * t # (a + b * r) * t
-            f = muladd(-a, r, b) * t # (b - a * r) * t
-        end
-    else
-        r = c/d
-        t = inv(muladd(c, r, d)) # 1/(c * r + d )
-        if (r == 0) then
-            e = muladd(c, a/d,  b) * t # (c * (a/d) + b) * t
-            f = muladd(c, b/d, -a) * t # (c * (b/d) - a) * t
-        else
-            e = muladd(a, r,  b) * t # (a * r + b) * t
-            f = muladd(b, r, -a) * t #(b * r - a) * t
-        end
-    end
-    hi = ComplexF64(Hi(e), Hi(f)) 
-    lo = ComplexF64(Lo(e), Lo(f))
-    return ComplexD64((hi, lo))
-end
 
 function Base.:(/)(x::ComplexD64, y::ComplexD64)
     a = real(x); b = imag(x); c = real(y); d = imag(y)
