@@ -25,6 +25,11 @@ Base.:(-)(x::ComplexD64) = ComplexD64((-Hi(x), -Lo(x)))
 fastabs(x::ComplexD64) = abs(Hi(x))
 fastabs2(x::ComplexD64) = abs2(Hi(x))
 
+fastabs(x::Float64) = abs(x)
+fastabs(x::ComplexF64) = abs(x)
+fastabs2(x::Float64) = abs2(x)
+fastabs2(x::ComplexF64) = abs2(x)
+
 function Base.ceil(x::FloatD64)
     xhi = Hi(x)
     hi = ceil(Hi(x))
