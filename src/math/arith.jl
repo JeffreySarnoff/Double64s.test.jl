@@ -131,7 +131,7 @@ function Base.:(/)(x::ComplexD64, y::ComplexD64)
     if abs(d) <= abs(c)
         r = d/c
         t = inv(fma(d, r, c))
-        if (r == 0) then
+        if r == 0
             d = d * t
             e = fma( d, b/c, a) # (a + d * (b/c)) * t
             f = fma(-d, a/c, b) # (b - d * (a/c)) * t
