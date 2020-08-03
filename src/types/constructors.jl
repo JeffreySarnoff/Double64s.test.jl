@@ -21,8 +21,12 @@ FloatD64(x, y) = FloatD64(Float64(x), Float64(y))
 FloatD64(x::ComplexD64) = real(x)
 FloatD64(x::ComplexF64) = FloatD64(real(x))
 
-ComplexD64(x::FloatD64) = ComplexD64((x,zero(FloatD64)))
-    
+function ComplexD64(x::FloatD64)
+    hi = ComplexF64(Hi(x))
+    lo = ComplexF64(Lo(x))
+    return ComplexD64((hi, lo))
+end
+
 ComplexD64(x::Float64) = ComplexD64((ComplexF64(x), zero(ComplexF64)))
 ComplexD64(x::Float64, y::Float64) = ComplexD64((ComplexF64(x), ComplexF64(y)))
 
