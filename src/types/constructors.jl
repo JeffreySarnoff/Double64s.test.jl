@@ -30,9 +30,9 @@ end
 ComplexD64(x::T) where {T<:Real} = ComplexD64(FloatD64(x))
 
 ComplexD64(x::T1, y::T2) where {T1<:Real, T2<:Real} =
-    ComplexD64((ComplexF64(x), ComplexF64(y))
+    ComplexD64( (ComplexF64(x), ComplexF64(y)) )
 
-ComplexD64(x::Float64, y::Float64) = ComplexD64((ComplexF64(x), ComplexF64(y)))
+ComplexD64(x::Float64, y::Float64) = ComplexD64(( ComplexF64(x), ComplexF64(y) ))
 
 # inverse constructors
 Base.Float64(x::FloatD64) = Hi(x)
