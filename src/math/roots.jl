@@ -8,24 +8,24 @@ function Base.sqrt(x::FloatD64)
     return x2
 end
  
-function fastsqrt(x::FloatD64)
+@inline function fastsqrt(x::FloatD64)
     x0 = sqrt(Hi(x))
     x1 = (x0 + x/x0) * 0.5
     return x1
 end
 
-function Base.cbrt(x::FloatD64)
-    x0 = cbrt(Hi(x))
-    x1 = (x0 + Double64s.fastsqrt(((4*p/x0)-x0^2)/3))/2
+function root3(x::FloatD64)
+    x0 = FloatD64(cbrt(Hi(p)))
+    x1 = (x0 + fastsqrt(((4*p/x0)-x0^2)/3))/2
     return x1
-    a = (4*x/x0) - x9*x0
-    b = fastsqrt(a)
-    x1 = (x0 + b/3)/2
-    #x1 = (x0 + sqrt(((4*p/x0)-x0^2)/3))/2
-    # x1 = (2*x0 + x/(x0*x0)) / 3.0
+end
+
+function Base.cbrt(x::FloatD64)
+    x0 = FloatD64(cbrt(Hi(x)))
+    x1 = (2*x0 + x/(x0*x0)) / 3.0
     x2 = (2*x1 + x/(x1*x1)) / 3.0
-    #x3 = (2*x2 + x/(x2*x2)) / 3.0
-    return x2
+    x3 = (2*x2 + x/(x2*x2)) / 3.0
+    return x3
 end
  
 function fastcbrt(x::FloatD64)
