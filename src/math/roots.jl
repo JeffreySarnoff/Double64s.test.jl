@@ -16,21 +16,10 @@ end
 
 function Base.cbrt(x::FloatD64)
     x0 = FloatD64(cbrt(Hi(x)))
-    # a = fastsqrt(((4*p/x0) - x0^2)/3)
-    a =  fma(4*p, inv(x0), - x0^2) / 3
-    a = fastsqrt(a)
-    x1 = (x0 + a)/2
-    # x1 = (x0 + fastsqrt(((4*p/x0)-x0^2)/3))/2
-    return x1
-end
-
-function Base.cbrt(x::FloatD64)
-    x0 = FloatD64(cbrt(Hi(x)))
     a =  fastsqrt( ((4*x/x0) - x0^2) / 3)
     x1 = (x0 + a)/2
     return x1
 end
-
 
 function fastcbrt(x::FloatD64)
     x0 = cbrt(Hi(x))
