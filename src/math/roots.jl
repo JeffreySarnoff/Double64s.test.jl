@@ -16,6 +16,8 @@ end
 
 function Base.cbrt(x::FloatD64)
     x0 = cbrt(Hi(x))
+    x1 = (x0 + Double64s.fastsqrt(((4*p/x0)-x0^2)/3))/2
+    return x1
     a = (4*x/x0) - x9*x0
     b = fastsqrt(a)
     x1 = (x0 + b/3)/2
