@@ -16,10 +16,14 @@ end
 
 function Base.cbrt(x::FloatD64)
     x0 = cbrt(Hi(x))
-    x1 = (2*x0 + x/(x0*x0)) / 3.0
+    a = (4*x/x0) - x9*x0
+    b = fastsqrt(a)
+    x1 = (x0 + b/3)/2
+    #x1 = (x0 + sqrt(((4*p/x0)-x0^2)/3))/2
+    # x1 = (2*x0 + x/(x0*x0)) / 3.0
     x2 = (2*x1 + x/(x1*x1)) / 3.0
-    x3 = (2*x2 + x/(x2*x2)) / 3.0
-    return x3
+    #x3 = (2*x2 + x/(x2*x2)) / 3.0
+    return x2
 end
  
 function fastcbrt(x::FloatD64)
