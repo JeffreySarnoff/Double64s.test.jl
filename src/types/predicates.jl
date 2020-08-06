@@ -8,11 +8,3 @@ for T in (:FloatD64, :ComplexD64)
     Base.isinteger(x::$T) = isinteger(Hi(x)) && isinteger(Lo(x))
   end
 end
-
-Base.issubnormal(x::FloatD64) = issubnormal(Hi(x))
-
-Base.floatmin(::Type{FloatD64}) = FloatD64(floatmin(Float64))
-Base.floatmax(::Type{FloatD64}) = FloatD64(floatmax(Float64))
-Base.typemin(::Type{FloatD64}) = FloatD64(typemin(Float64))
-Base.typemax(::Type{FloatD64}) = FloatD64(typemax(Float64))
-
