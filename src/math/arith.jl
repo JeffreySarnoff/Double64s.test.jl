@@ -400,8 +400,13 @@ function normalizedenom(n,d)
     return n, fr
 end
 
+function normalized(n::FloatD64, d::FloatD64)
+    scaleby = inv(Hi(d))
+    return n*scaleby, d*scaleby
+end
+
 function Goldschmidt(n::T,d::T,k) where {T}
-    n, d = normalizedenom(n,d)
+    n, d = normalized(n,d)
     e = 1 - d
     q = n;  qold = zero(T)
     while !iszero(k) && (qold != q) 
@@ -411,6 +416,20 @@ function Goldschmidt(n::T,d::T,k) where {T}
         e = e * e
     end
     return q
+end
+
+function Goldschmidt(n::FloatD64,d::FloatD64,k=4)}
+    n1, d1 = normalized(n,d)
+    e = 1 - d1
+    q = n1;  qold = zero(T)
+    while (qold != q) && !iszero(k)
+       k -= 1
+       qold = q
+       q = q * (1+e) # q = q + q*e
+       e = e * e
+    end
+    delta = (n1 - q*d1)/2
+    return q + delta
 end
 
 =#
