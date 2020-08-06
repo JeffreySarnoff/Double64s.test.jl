@@ -1,7 +1,7 @@
 FloatD64(x::Float64) = FloatD64((x, 0.0))
 
 for T in (:Float32, :Float16, :Int32, :Int16, :Int8)
-    @eval FloatD64((Float64(x), 0.0))
+    @eval FloatD64(x::$T) = ((Float64(x), 0.0))
 end    
 
 for T in (:Int64, :Int128)
