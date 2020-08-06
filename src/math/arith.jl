@@ -105,7 +105,7 @@ Base.:(/)(x::FloatD64, y::FloatD64) = FloatD64(divide_dddd_dd(Hi(x), Lo(x), Hi(y
     return hi, lo
 end
 
-elseif dividealg = 17
+elseif dividealg == 17
         
 # Algorithm 17 from [Joldes, Muller, Popescu 2017]
 function Base.:(/)(x::FloatD64, y::FloatD64)
@@ -120,7 +120,7 @@ function Base.:(/)(x::FloatD64, y::FloatD64)
     return FloatD64(two_hilo_sum(thi, tlo))
 end
 
-elseif dividealg = 18
+elseif dividealg == 18
 
 # relative error < 9.8u², 31 FP Ops, 100.7 bits (relative)
 # " 5.922 x 2^(-106) "
