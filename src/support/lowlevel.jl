@@ -86,9 +86,11 @@ u = 2^(-p) == ulp(1.0)/2 # roundoff error unit
 =#
 
 ulp(x::Float64) = ldexp(ufp(x), -52) # or eps(x)
-uls(x::Float64) = ldexp(ufp(x), -trailing_zeros(reinterpret(UInt64,significand(x))))
 
-
+function uls(x::Float64)
+    k =  54 - trailing_zeros(reinterpret(UInt64, x))
+    return ldexp(ufp(x), -k)
+end    
 
 
 function nearestint(x::T) where {T<:Union{Float64, FloatD64}}
