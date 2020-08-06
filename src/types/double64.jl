@@ -1,10 +1,33 @@
-struct FloatD64 <: Real
-    val::Tuple{Float64, Float64}
+struct FloatD64 <: AbstractFloat
+    hi::Float64
+    lo::Float64
 end
 
-struct ComplexD64 <: Number
-    val::Tuple{Complex{Float64}, Complex{Float64}}
-end
+Hi(x::FloatD64) = x.hi
+Lo(x::FloatD64) = x.lo
+HiLo(x::FloatD64) = (x.hi, x.lo)
+
+FloatD64(x::Float64, y::Float64) = FloatD64(two_sum(x, y))
+
+Base.:(-)(x::FloatD64) = FloatD64((-Hi(y), -Lo(y)))
+Base.:(-)(x::FloatD64, y::FloatD64) = FloatD64(Hi(x)-Hi(y), Lo(x)-Lo(y))
+Base.:(+)(x::FloatD64, y::FloatD64) = FloatD64(Hi(x)+Hi(y), Lo(x)+Lo(y))
+
+Base.promote_rule(::Type{FloatD64}, ::Type{Float64}) = FloatD64
+Base.promote_rule(::Type{FloatD64}, ::Type{Int64}) = FloatD64
+
+Base.convert(::Type{FloatD64}, x::Float64) = FloatD64((x, 0.0))
+Base.convert(::Type{FloatD64}, x::Int64) = FloatD64((Float64(x), 0.0))
+
+Base.:(==)(x::FloatD64, y::FloatD64) = Hi(x) === Hi(y) && Lo(x) === Lo(y)
+Base.:(<)(x::FloatD64, y::FloatD64) = Hi(x) < Hi(y) || (Lo(x) < Lo(y) && Hi(x) === Hi(y))
+Base.:(<=)(x::FloatD64, y::FloatD64) = Hi(x) < Hi(y) || (Lo(x) <= Lo(y) && Hi(x) === Hi(y))
+
+const ComplexD64 = Complex{FloatD64}
+
+Hi(x::ComplexD64) = x.re
+Lo(x::FloatD64) = x.val[2]
+HiLo(x::FloatD64) = x.val
 
 const FloatComplexD64 = Union{FloatD64, ComplexD64}
 
