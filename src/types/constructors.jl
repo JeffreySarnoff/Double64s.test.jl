@@ -48,6 +48,10 @@ Base.BigInt(x::ComplexD64) = BigInt(BigFloat(x))
 Base.Int128(x::FloatD64) = Int128(BigInt(x))
 Base.Int128(x::ComplexD64) = Int128(BigInt(x))
 
+function Base.Int64(x::FloatD64)
+    Int64(Hi(x)) + Int64(Lo(x))
+end
+
 for T in (:Float32, :Float16, :Int32, :Int16, :Int8)
     @eval Base.$T(x::FloatD64) = $T(Hi(x))
 end
