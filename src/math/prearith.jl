@@ -132,6 +132,13 @@ ldexp2pow(p::Float64) = ldexp(1.0, p)
     ufp(x) is "unit in the first place"
     ufp(0) = 0
     ufp(x!=0) = 2.0^floor(log2(abs(x)))
+
+    unsafe_ufp(x) errors on x in (NaN, Inf)
 =#
-ufp(x::Float64) = (x !== 0.0) ? ldexp(1.0, exponent(x)) : x
+@inline unsafe_ufp(x::Float64) = !iszero(x) ? ldexp(1.0, exponent(x)) : x
+unsafe_ufp(x::FloatD64) = unsafe_ufp(Hi(x))
+
+ufp(x::Float64) = isfinite(x) ? unsafe_ufp(x) : x
 ufp(x::FloatD64) = ufp(Hi(x))
+
+        
