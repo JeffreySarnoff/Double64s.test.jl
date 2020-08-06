@@ -42,4 +42,11 @@ include("math/rounding.jl")
 include("math/fma.jl")
 include("math/roots.jl")
 
+Base.log10(x::FloatD64) = FloatD64(log10(Float128(x)))
+Base.log2(x::FloatD64) = FloatD64(log2(Float128(x)))
+Base.log(x::FloatD64) = FloatD64(log(Float128(x)))
+Base.exp10(x::FloatD64) = FloatD64(exp10(Float128(x)))
+Base.exp2(x::FloatD64) = FloatD64(exp2(Float128(x)))
+Base.exp(x::FloatD64) = FloatD64(exp(Float128(x)))
+
 end  # Double64s
