@@ -54,6 +54,40 @@ unsafe_ufp(x::FloatD64) = unsafe_ufp(Hi(x))
 ufp(x::Float64) = isfinite(x) ? unsafe_ufp(x) : x
 ufp(x::FloatD64) = ufp(Hi(x))
 
+#=
+Formal Verification of a Floating-Point Expansion Renormalization Algorithm
+by Sylvie Boldo, Mioara Joldes, Jean-Michel Muller, Valentina Popescu
+8th International Conference on Interactive Theorem Proving (ITP’2017),
+Sep 2017, Brasilia, Brazil
+
+Definition 21 A normal binary precision-p floating-point (FP) number has the
+form x = M_x · 2^(e_x - p + 1) with 2^(p−1) ≤ |Mx| ≤ 2^(p)−1.
+The integer e_x is the exponent of x, and M_x · 2^(-p + 1) is the significand of x.
+
+We denote 
+ulp(x) = 2^(e_x−p+1) # unit in the last place
+uls(x) = ulp(x) * 2^(z_x) # unit in last significant place
+  where z_x is the number of trailing zeros at the end of M_x
+
+Algorithms for triple-word arithmetic
+by Nicolas Fabiano and Jean-Michel Muller and Joris Picot
+
+[We denote]
+ufp(x) = 2^(floor(log2(abs(x)))) # unit in the first place
+ulp(x) = ufp(x) * 2^(-p+1)       # for Float64, p=53
+ulp(x) = ufp(x) * 2^(-52)
+uls(x) = the largest 2^k such that isinteger(x/2^k)
+
+ufp(x) is the weight of of its most significant bit
+ulp(x) is the weight of of its least significant bit
+uls(x) is the weight of its rightmost nonzero bit
+
+u = 2^(-p) == ulp(1.0)/2 # roundoff error unit
+=#
+
+ulp(x::Float64) = ldexp(ufp(x), -52) # or eps(x)
+uls(x::Float64) = ldexp(ufp(x), trailing_zeros(reinterpret(UInt64,significand(x))))
+
 
 
 
