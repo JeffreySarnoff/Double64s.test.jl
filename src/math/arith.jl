@@ -1,5 +1,8 @@
-# relative error < 3u², 20 FP Ops, 102.4 bits (relative)
 # Algorithm 6 from [Joldes, Muller, Popescu 2017]
+# relative error < 3u², 20 FP Ops
+# rel accuracy [102.4, 104.4] bits
+# "The largest relative error we have obtain through many tests is around 2.25 × 2^−2p = 2.25 u^2.
+#  For Float64, this is 2.25*2^(-106) [rel accuracy 104.8 bits]." pg 11
 function Base.:(+)(x::FloatD64, y::FloatD64) 
     hi, lo   = two_sum(Hi(x), Hi(y))
     thi, tlo = two_sum(Lo(x), Lo(y))
@@ -9,6 +12,8 @@ function Base.:(+)(x::FloatD64, y::FloatD64)
     hi, lo = two_hilo_sum(hi, c)
     return FloatD64((hi, lo))
 end
+
+biterror(::typeof(+)) = 2.25
 
 function Base.:(+)(x::FloatD64, y::Float64) 
     hi, lo = two_sum(Hi(x), y)
@@ -24,7 +29,6 @@ function Base.:(+)(x::Float64, y::FloatD64)
     return FloatD64((hi, lo))
 end
 
-
 # relative error < 3u², 20 FP Ops, 102.4 bits (relative)
 # Algorithm 6 from [Joldes, Muller, Popescu 2017]
 # reworked for subtraction
@@ -37,6 +41,8 @@ function Base.:(-)(x::FloatD64, y::FloatD64)
     hi, lo = two_hilo_sum(hi, c)
     return FloatD64((hi, lo))
 end
+
+biterror(::typeof(-)) = 2.25
 
 function Base.:(-)(x::FloatD64, y::Float64) 
     hi, lo = two_diff(Hi(x), y)
@@ -53,6 +59,7 @@ function Base.:(-)(x::Float64, y::FloatD64)
 end
 
 # relative error < 5u², 9 FP Ops, 101.6 bits (relative)
+# "The largest relative error we have obtain through many tests is 3.936 × 2^−2p = 3.936 * 2^(-106).
 # Algorithm 12 from [Joldes, Muller, Popescu 2017]
 function Base.:(*)(x::FloatD64, y::FloatD64)
     hi, lo = two_prod(Hi(x), Hi(y))
@@ -63,6 +70,9 @@ function Base.:(*)(x::FloatD64, y::FloatD64)
     hi, lo = two_hilo_sum(hi, t)
     return FloatD64((hi, lo))
 end
+
+biterror(::typeof(*)) = 3.936
+
 
 function Base.:(*)(x::FloatD64, y::Float64)
     hi, lo = two_prod(Hi(x), y)
@@ -81,6 +91,7 @@ function Base.:(*)(x::Float64, y::FloatD64)
 end
 
 # relative error < 9.8u², 31 FP Ops, 100.7 bits (relative)
+# " 5.922 x 2^(-106) "
 # Algorithm 18 from [Joldes, Muller, Popescu 2017] 
 function Base.:(/)(x::FloatD64, y::FloatD64)
     yhi, ylo = HiLo(y)
@@ -93,6 +104,9 @@ function Base.:(/)(x::FloatD64, y::FloatD64)
     zh, zl = DWTimesDW2(Hi(x), Lo(x), mh, ml) # (xh, xl) * (mh, ml)
     return FloatD64((zh, zl))
 end
+
+biterror(::typeof(/)) = 5.922
+biterror(::typeof(inv)) = 5.922
 
 function Base.:(/)(x::FloatD64, y::Float64)
     th = inv(y)
