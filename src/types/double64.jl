@@ -95,19 +95,3 @@ const FloatComplexD64 = Union{FloatD64, ComplexD64}
 
 Base.real(x::FloatD64) = x
 Base.imag(x::FloatD64) = FloatD64((0.0, 0.0))
-
-#=
-Base.:(-)(x::FloatD64) = FloatD64((-Hi(y), -Lo(y)))
-Base.:(-)(x::FloatD64, y::FloatD64) = FloatD64(Hi(x)-Hi(y), Lo(x)-Lo(y))
-Base.:(+)(x::FloatD64, y::FloatD64) = FloatD64(Hi(x)+Hi(y), Lo(x)+Lo(y))
-
-Base.promote_rule(::Type{FloatD64}, ::Type{Float64}) = FloatD64
-Base.promote_rule(::Type{FloatD64}, ::Type{Int64}) = FloatD64
-
-Base.convert(::Type{FloatD64}, x::Float64) = FloatD64((x, 0.0))
-Base.convert(::Type{FloatD64}, x::Int64) = FloatD64((Float64(x), 0.0))
-
-Base.:(==)(x::FloatD64, y::FloatD64) = Hi(x) === Hi(y) && Lo(x) === Lo(y)
-Base.:(<)(x::FloatD64, y::FloatD64) = Hi(x) < Hi(y) || (Lo(x) < Lo(y) && Hi(x) === Hi(y))
-Base.:(<=)(x::FloatD64, y::FloatD64) = Hi(x) < Hi(y) || (Lo(x) <= Lo(y) && Hi(x) === Hi(y))
-=#
