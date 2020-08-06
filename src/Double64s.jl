@@ -18,20 +18,6 @@ using ErrorfreeArithmetic, Quadmath
 
 
 """
-    ComplexD64
-
-A struct wrapping a Tuple of two Complex{Float64}s: (most significant part, least significant part).
-
-Also the constructor for that struct.
-""" ComplexD64
-
-"""
-    FloatComplexD64 <: Union
-
-Union of FloatD64 and ComplexD64 types.
-""" FloatComplexD64
-
-"""
    fastabs(x)
 
 abs(Hi(x))
