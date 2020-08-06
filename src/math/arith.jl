@@ -90,6 +90,19 @@ function Base.:(*)(x::Float64, y::FloatD64)
     return FloatD64((hi, lo))
 end
 
+# Algorithm 17 from [Joldes, Muller, Popescu 2017]
+function Base.:(/)(x::FloatD64, y::FloatD64)
+    xhi, xlo = HiLo(x)
+    yhi, ylo = HiLo(y)
+    thi = xhi / yhi
+    rhi, rlo = DWTimesFP1(yhi, ylo, thi)
+    dhi = xhi - rhi
+    dlo = xlo - rlo
+    d = dhi + dlo
+    tlo = d / yhi
+    return FloatD64(two_hilo_sum(thi, tlo))
+end
+
 # relative error < 9.8u², 31 FP Ops, 100.7 bits (relative)
 # " 5.922 x 2^(-106) "
 # Algorithm 18 from [Joldes, Muller, Popescu 2017] 
@@ -129,18 +142,27 @@ function Base.:(/)(x::Float64, y::FloatD64)
     return FloatD64((zh, zl))
 end
 
-# algorithm 9 from [Joldes, Muller, Popescu 2017] 
-@inline function DWTimesFP3(xh, xl, y)
-    ch, cl1 = two_prod(xh, y)
-    cl3 = fma(xl, y, cl1)
-    zh, zl = two_hilo_sum(ch, cl3)
-    return zh, zl
-end
 # algorithm 4 from [Joldes, Muller, Popescu 2017] 
 @inline function DWPlusFP(xh::Float64, xl::Float64, y::Float64)
     sh, sl = two_sum(xh, y)
     v = xl + sl
     zh, zl = two_hilo_sum(sh, v)
+    return zh, zl
+end
+# algorithm 7 from [Joldes, Muller, Popescu 2017] 
+@inline function DWTimesFP1(xh, xl, y)
+    ch, cl1 = two_prod(xh, y)
+    cl2 = xl*y
+    th, tl1 = two_hilo_sum(ch, cl2)
+    tl2 = tl1 + cl1
+    zh, zl = two_hilo_sum(th, tl2)
+    return zh, zl
+end
+# algorithm 9 from [Joldes, Muller, Popescu 2017] 
+@inline function DWTimesFP3(xh, xl, y)
+    ch, cl1 = two_prod(xh, y)
+    cl3 = fma(xl, y, cl1)
+    zh, zl = two_hilo_sum(ch, cl3)
     return zh, zl
 end
 # algorithm 12 from [Joldes, Muller, Popescu 2017] 
