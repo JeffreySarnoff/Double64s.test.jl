@@ -392,3 +392,25 @@ end
 
 Base.fma(x::FloatD64,y::FloatD64,z::FloatD64) = muladd(x,y,z)
 =#
+#=
+
+function normalizedenom(n,d)
+    fr,xp = frexp(d)
+    n = ldexp(n, -xp)
+    return n, fr
+end
+
+function Goldschmidt(n::T,d::T,k) where {T}
+    n, d = normalizedenom(n,d)
+    e = 1 - d
+    q = n;  qold = zero(T)
+    while !iszero(k) && (qold != q) 
+        k -= 1
+        qold = q
+        q = q * (1+e)
+        e = e * e
+    end
+    return q
+end
+
+=#
