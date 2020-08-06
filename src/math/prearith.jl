@@ -11,9 +11,10 @@ significant_bits(::Type{ComplexF64}) =   53
 significant_bits(::Type{ComplexD64}) = 2*53
 
 Base.frexp(x::FloatD64) = (frexp(Hi(x)), frexp(Lo(x)))
-function Base.ldexp(x::Tuple{Tuple{Float64,Int64},Tuple{Float64,Int64}})
-    hi = frexp(x[1]...)
-    lo = frexp(x[2]...)
+
+function Base.ldexp(x::Tuple{Tuple{Float64,Int64},Tuple{Float64,Int64}})    
+    hi = ldexp(x[1]...)
+    lo = ldexp(x[2]...)
     return FloatD64((hi, lo))
 end
 
