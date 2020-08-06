@@ -38,6 +38,7 @@ include("types/predicates.jl")
 
 include("math/prearith.jl")
 include("math/arith.jl")
+include("math/rounding.jl")
 include("math/fma.jl")
 include("math/roots.jl")
 
