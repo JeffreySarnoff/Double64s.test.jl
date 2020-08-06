@@ -94,6 +94,52 @@ function Base.trunc(x::FloatD64)
     return signbit(x) ? ceil(x) : floor(x)
 end
 
+function Base.div(x::FloatD64, y::FloatD64)
+    (!isfinite(x) || isnan(y)) && return NaND64
+    !isfinite(y) && return zero(FloatD64)
+    return trunc(x / y)
+end
+
+function Base.fld(x::FloatD64, y::FloatD64)
+    (!isfinite(x) || isnan(y)) && return NaND64
+    !isfinite(y) && return zero(FloatD64)
+    return floor(x / y)
+end
+
+function Base.cld(x::FloatD64, y::FloatD64)
+    (!isfinite(x) || isnan(y)) && return NaND64
+    !isfinite(y) && return zero(FloatD64)
+    return ceil(x / y)
+end
+
+function Base.rem(x::FloatD64, y::FloatD64)
+    (!isfinite(x) || isnan(y)) && return NaND64
+    !isfinite(y) && return x
+    return x - div(x,y) * y
+end
+
+function Base.mod(x::FloatD64, y::FloatD64)
+    (!isfinite(x) || isnan(y)) && return NaND64
+    !isfinite(y) && return x
+    return x - fld(x,y) * y
+end
+
+function Base.divrem(x::FloatD64, y::FloatD64)
+    (!isfinite(x) || isnan(y)) && return NaND64
+    !isfinite(y) && return zero(FloatD64)
+    dv = trunc(x / y)
+    rm = x - dv * y
+    return dv, rm
+end
+
+function Base.fldmod(x::FloatD64, y::FloatD64)
+    (!isfinite(x) || isnan(y)) && return NaND64
+    !isfinite(y) && return zero(FloatD64)
+    fr = floor(x / y)
+    md = x - fr * y
+    return fr, md
+end
+
 function nearestint(x::T) where {T<:Union{Float64, FloatD64}}
     s, absx = signbit(x), abs(x)
     absx = absx + 0.5
