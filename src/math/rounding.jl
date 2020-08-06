@@ -83,7 +83,7 @@ function Base._round_sigdigits(x::FloatD64, r::RoundingMode, sigdigits::Integer,
     _round_digits(x, r, sigdigits-h, base)
 end
 
-Base.hidigit(x::FloatD64, base) = hidigit(Hi(x), base)
+Base.hidigit(x::FloatD64, base) = Base.hidigit(Hi(x), base)
 
 
 #=
