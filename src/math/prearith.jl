@@ -127,14 +127,11 @@ Base.eps(x::FloatD64) = iszero(Lo(x)) ? Hi(x) * 2.465190328815662e-32 : eps(Lo(x
    for p in trunc(Int,log2(nextfloat(0.0))) .. trunc(Int, log2(prevfloat(floatmax(Float64), 354))
    for smaller p --> 0.0 for larger p --> Inf
 =#
-ldexp2pow(p) = ldexp(1.0, p)
-
-# ulp(x) unit in the last place
+ldexp2pow(p::Float64) = ldexp(1.0, p)
 #=
-   ufp(x) unit in the first place
-ufp(0) = 0
-ufp(x) = 2.0^floor(log2(abs(x)))
+    ufp(x) is "unit in the first place"
+    ufp(0) = 0
+    ufp(x!=0) = 2.0^floor(log2(abs(x)))
 =#
-ufp(x::Float64) = (x === 0.0) ? x : ldexp2pow(trunc(log2(abs(x))))
-ufp(x::FloatD64) = (Hi(x) === 0.0) ? x : ldexp2pow(trunc(log2(abs(x))))
-
+ufp(x::Float64) = (x !== 0.0) ? ldexp(1.0, exponent(x)) : x
+ufp(x::FloatD64) = ufp(Hi(x))
