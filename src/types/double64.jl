@@ -35,6 +35,7 @@ struct FloatD64 <: AbstractFloat
     hilo::Tuple{Float64, Float64}
 end
 
+FloatD64(x::FloatD64) = x
 FloatD64(x::Float64, y::Float64) = FloatD64(two_sum(x,y))
 
 """
