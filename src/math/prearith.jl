@@ -115,5 +115,26 @@ function accurate_c1c2(value::Real, ::Type{T}, p=significant_bits(T)) where {T<:
     return c1, c2
 end
 
-    
-        
+# ~2^(-105) q.v. Error bounds from extra-precise iterative refinement
+# ACM Transactions on Mathematical Software Vol. 32, No. 2 pg 337
+# .. IEEE-754 double precision as working precision (εw = 2−53) and double-double as residual precision (εr ≈ 2−105)."
+
+Base.eps(::Type{FloatD64})   = 2.465190328815662e-32
+Base.eps(x::FloatD64) = iszero(Lo(x)) ? Hi(x) * 2.465190328815662e-32 : eps(Lo(x))
+
+#=
+   faster 2.0^p
+   for p in trunc(Int,log2(nextfloat(0.0))) .. trunc(Int, log2(prevfloat(floatmax(Float64), 354))
+   for smaller p --> 0.0 for larger p --> Inf
+=#
+ldexp2pow(p) = ldexp(1.0, p)
+
+# ulp(x) unit in the last place
+#=
+   ufp(x) unit in the first place
+ufp(0) = 0
+ufp(x) = 2.0^floor(log2(abs(x)))
+=#
+ufp(x::Float64) = (x === 0.0) ? x : ldexp2pow(trunc(log2(abs(x))))
+ufp(x::FloatD64) = (Hi(x) === 0.0) ? x : ldexp2pow(trunc(log2(abs(x))))
+
