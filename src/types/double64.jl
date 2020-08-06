@@ -23,22 +23,65 @@ There are more than three approaches, here are three:
 (a) is implemented
 =@
 
+"""
+    FloatD64
+
+A struct wrapping a Tuple of two Float64s: (most significant part, least significant part).
+
+Also a constructor for that struct.
+""" FloatD64
+
 struct FloatD64 <: AbstractFloat
     hilo::Tuple{Float64, Float64}
 end
 
-Hi(x::FloatD64) = x.hilo[1]
-Lo(x::FloatD64) = x.hilo[2]
-HiLo(x::FloatD64) = x.hilo
-
 FloatD64(x::Float64, y::Float64) = FloatD64(two_sum(x,y))
 
+"""
+   HiLo(x)
+
+Unwraps the two tuple: (most significant part, least significant part).
+
+see: [`Hi`](@ref), [`Lo`](@ref)
+"""
+HiLo(x::FloatD64) = x.hilo
+
+"""
+   Hi(x)
+
+Unwraps the most significant part.
+
+see: [`Lo`](@ref), [`HiLo`](@ref)
+"""
+Hi(x::FloatD64) = x.hilo[1]
+
+"""
+   Lo(x)
+
+Unwraps the least signficant part.
+
+see: [`Hi`](@ref), [`HiLo`](@ref)
+"""
+Lo(x::FloatD64) = x.hilo[2]
+
+"""
+    ComplexD64
+
+A complex value formed or FloatD64 real and imaginary parts
+
+Also a constructor for that.
+""" 
 const ComplexD64 = Complex{FloatD64}
 
 Hi(x::ComplexD64) = ComplexF64(Hi(x.re), Hi(x.im))
 Lo(x::ComplexD64) = ComplexF64(Lo(x.re), Lo(x.im))
 HiLo(x::ComplexD64) = Hi(x), Lo(x)
 
+"""
+    FloatComplexD64 <: Union
+
+Union of FloatD64 and ComplexD64 types.
+"""
 const FloatComplexD64 = Union{FloatD64, ComplexD64}
 
 Base.real(x::FloatD64) = x
