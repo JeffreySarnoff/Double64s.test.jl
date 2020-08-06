@@ -95,7 +95,8 @@ dividealg = parse(Int,ENV["dividealg"])
 if dividealg == 0
     
 # from DoubleFloats
-Base.:(/)(x::FloatD64, y::FloatD64) = FloatD64(divide_dddd_dd(Hi(x), Lo(x), Hi(y), Lo(y))
+Base.:(/)(x::FloatD64, y::FloatD64) = FloatD64(divide_dddd_dd(Hi(x), Lo(x), Hi(y), Lo(y)))
+
 @inline function divide_dddd_dd(xhi::T, xlo::T, yhi::T, ylo::T) where {T<:Float64}
     hi = xhi / yhi
     uh, ul = two_prod(hi, yhi)
