@@ -77,6 +77,8 @@ function Base.ceil(x::FloatD64)
     return FloatD64((hi, lo))
 end
 
+Base.ceil(::Type{T}, x::FloatD64) where {T<:Integer} = T(ceil(x))
+
 function Base.floor(x::FloatD64)
     xhi = Hi(x)
     hi = floor(Hi(x))
@@ -90,9 +92,13 @@ function Base.floor(x::FloatD64)
     return FloatD64((hi, lo))
 end
 
+Base.floor(::Type{T}, x::FloatD64) where {T<:Integer} = T(floor(x))
+
 function Base.trunc(x::FloatD64)
     return signbit(x) ? ceil(x) : floor(x)
 end
+
+Base.trunc(::Type{T}, x::FloatD64) where {T<:Integer} = T(trunc(x))
 
 function Base.div(x::FloatD64, y::FloatD64)
     (!isfinite(x) || isnan(y)) && return NaND64
