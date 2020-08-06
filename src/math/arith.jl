@@ -91,7 +91,7 @@ function Base.:(/)(x::FloatD64, y::FloatD64)
     dh, dl = DWTimesFP3(eh, el, th) # (eh, el) * rh
     mh, ml = DWPlusFP(dh, dl, th) # (dh, dl) + th
     zh, zl = DWTimesDW2(Hi(x), Lo(x), mh, ml) # (xh, xl) * (mh, ml)
-    return FloatD64(zh, zl)
+    return FloatD64((zh, zl))
 end
 
 function Base.:(/)(x::FloatD64, y::Float64)
@@ -100,7 +100,7 @@ function Base.:(/)(x::FloatD64, y::Float64)
     dh, dl = DWTimesFP3(rh, 0.0, th) # (eh, el) * rh
     mh, ml = DWPlusFP(dh, dl, th) # (dh, dl) + th
     zh, zl = DWTimesDW2(Hi(x), Lo(x), mh, ml) # (xh, xl) * (mh, ml)
-    return FloatD64(zh, zl)
+    return FloatD64((zh, zl))
 end
 
 function Base.:(/)(x::Float64, y::FloatD64)
@@ -112,7 +112,7 @@ function Base.:(/)(x::Float64, y::FloatD64)
     dh, dl = DWTimesFP3(eh, el, th) # (eh, el) * rh
     mh, ml = DWPlusFP(dh, dl, th) # (dh, dl) + th
     zh, zl = DWTimesDW2(x, 0.0, mh, ml) # (xh, xl) * (mh, ml)
-    return FloatD64(zh, zl)
+    return FloatD64((zh, zl))
 end
 
 # algorithm 9 from [Joldes, Muller, Popescu 2017] 
@@ -151,7 +151,7 @@ function Base.:(inv)(y::FloatD64)
     dh, dl = DWTimesFP3(eh, el, th) # (eh, el) * rh
     mh, ml = DWPlusFP(dh, dl, th) # (dh, dl) + th
     # zh, zl = DWTimesDW2(1.0, 0.0, mh, ml) # (1, 0) * (mh, ml)
-    return FloatD64(mh, ml)
+    return FloatD64((mh, ml))
 end
 
 Base.:(\)(x::FloatD64, y::FloatD64) = (/)(y, x)
