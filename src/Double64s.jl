@@ -8,7 +8,8 @@ exported field accessors: [`Hi`](@ref), [`Lo`](@ref), [`HiLo`](@ref)
 module Double64s
 
 export FloatD64, ComplexD64, FloatComplexD64,
-  Hi, Lo, HiLo, ReIm,
+  Hi, Lo, HiLo,
+  NaND64, InfD64,
   signs, signbits,
   fastabs, fastabs2
 
