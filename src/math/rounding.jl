@@ -49,7 +49,6 @@ Base.round(x::FloatD64, r::RoundingMode; digits=Integer=0, base = 10) = FloatD64
 Base.round(x::FloatD64, r::RoundingMode; sigdigits=Integer=0, base = 10) = FloatD64(round(Float128(x), r; sigdigits=sigdigits, base=base))
 =#
 
-Base.hidigit(x::FloatD64) = Base.hidigit(Hi(x))
 
 #=
 # NOTE: this relies on the current keyword dispatch behaviour (#9498).
@@ -78,6 +77,14 @@ function Base.round(x::FloatD64, r::RoundingMode=RoundNearest;
     end
 end
 =#
+
+function Base._round_sigdigits(x::FloatD64, r::RoundingMode, sigdigits::Integer, base)
+    h = hidigit(x, base)
+    _round_digits(x, r, sigdigits-h, base)
+end
+
+Base.hidigit(x::FloatD64, base) = hidigit(Hi(x), base)
+
 
 #=
   round([T,] x, [r::RoundingMode])
