@@ -90,6 +90,22 @@ function Base.:(*)(x::Float64, y::FloatD64)
     return FloatD64((hi, lo))
 end
 
+dividealg = parse(Int,ENV["dividealg"])
+
+if dividealg == 0
+    
+# from DoubleFloats
+Base.:(/)(x::FloatD64, y::FloatD64) = FloatD64(divide_dddd_dd(Hi(x), Lo(x), Hi(y), Lo(y))
+@inline function divide_dddd_dd(xhi::T, xlo::T, yhi::T, ylo::T) where {T<:Float64}
+    hi = xhi / yhi
+    uh, ul = two_prod(hi, yhi)
+    lo = ((((xhi - uh) - ul) + xlo) - hi*ylo)/yhi
+    hi,lo = two_hilo_sum(hi, lo)
+    return hi, lo
+end
+
+elseif dividealg = 17
+        
 # Algorithm 17 from [Joldes, Muller, Popescu 2017]
 function Base.:(/)(x::FloatD64, y::FloatD64)
     xhi, xlo = HiLo(x)
@@ -102,6 +118,8 @@ function Base.:(/)(x::FloatD64, y::FloatD64)
     tlo = d / yhi
     return FloatD64(two_hilo_sum(thi, tlo))
 end
+
+elseif dividealg = 18
 
 # relative error < 9.8u², 31 FP Ops, 100.7 bits (relative)
 # " 5.922 x 2^(-106) "
@@ -118,7 +136,9 @@ function Base.:(/)(x::FloatD64, y::FloatD64)
     return FloatD64((zh, zl))
 end
 
-biterror(::typeof(/)) = 5.922
+end # dividealg
+
+    biterror(::typeof(/)) = 5.922
 biterror(::typeof(inv)) = 5.922
 
 function Base.:(/)(x::FloatD64, y::Float64)
