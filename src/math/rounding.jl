@@ -6,7 +6,6 @@ function Base.round(x::FloatD64, ::RoundingMode{:Up})
 end
 Base.round(::Type{T}, x::FloatD64, ::RoundingMode{:Up}) where {T<:Integer} = T(round(x, RoundUp))
 
-
 function Base.round(x::FloatD64, ::RoundingMode{:Down})
     return floor(x)
 end
