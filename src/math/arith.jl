@@ -103,6 +103,7 @@ end
     return hi, lo
 end
 
+#=
 function (div17)(x::FloatD64, y::FloatD64)
     xhi, xlo = HiLo(x)
     yhi, ylo = HiLo(y)
@@ -114,7 +115,8 @@ function (div17)(x::FloatD64, y::FloatD64)
     tlo = d / yhi
     return FloatD64(two_hilo_sum(thi, tlo))
 end
-        
+=#
+
 # Algorithm 17 from [Joldes, Muller, Popescu 2017]
 function Base.:(/)(x::FloatD64, y::FloatD64)
     xhi, xlo = HiLo(x)
@@ -190,7 +192,8 @@ end
     zh, zl = two_hilo_sum(sh, v)
     return zh, zl
 end
-# algorithm 7 from [Joldes, Muller, Popescu 2017] 
+# algorithm 7 from [Joldes, Muller, Popescu 2017]
+# calculation of (xh, xl) * y
 @inline function DWTimesFP1(xh, xl, y)
     ch, cl1 = two_prod(xh, y)
     cl2 = xl*y
@@ -200,13 +203,30 @@ end
     return zh, zl
 end
 # algorithm 9 from [Joldes, Muller, Popescu 2017] 
+# calculation of (xh, xl) * y
 @inline function DWTimesFP3(xh, xl, y)
     ch, cl1 = two_prod(xh, y)
     cl3 = fma(xl, y, cl1)
     zh, zl = two_hilo_sum(ch, cl3)
     return zh, zl
 end
-# algorithm 12 from [Joldes, Muller, Popescu 2017] 
+
+# algorithm 10 from [Joldes, Muller, Popescu 2017]
+# calcualtes (xh, xl) * (yh, yl)
+# the largest relative error found is  4.9916 × 2^(-106)
+@inline function DWTimesDW1(xh, xl, yh, yl)
+    ch, cl1 = two_prod(xh, yh)
+    tl1 = xh * yl
+    tl2 = xl * yh
+    cl2 = tl1 + tl2
+    cl3 = cl1 + cl2
+    zh, zl = two_hilo_sum(ch, cl3)
+    return zh, zl
+end
+
+# algorithm 12 from [Joldes, Muller, Popescu 2017]
+# calcualtes (xh, xl) * (yh, yl)
+# the largest relative error found is  3.936 × 2^(-106)
 @inline function DWTimesDW2(xh, xl, yh, yl)
     ch, cl1 = two_prod(xh, yh)
     tl0 = xl * yl
