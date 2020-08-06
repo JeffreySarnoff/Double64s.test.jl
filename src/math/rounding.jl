@@ -42,10 +42,12 @@ function Base.round(x::FloatD64, ::RoundingMode{:NearestTiesUp})
 end
 Base.round(::Type{T}, x::FloatD64, ::RoundingMode{:NearestTiesUp}) where {T<:Integer} = T(round(x, RoundNearestTiesUp))
 
+#=
 Base.round(x::FloatD64; digits::Integer=0, base = 10) = FloatD64(round(Float128(x); digits=digits, base=base))
 Base.round(x::FloatD64; sigdigits::Integer=0, base = 10) = FloatD64(round(Float128(x); sigdigits=sigdigits, base=base))
 Base.round(x::FloatD64, r::RoundingMode; digits=Integer=0, base = 10) = FloatD64(round(Float128(x), r; digits=digits, base=base))
 Base.round(x::FloatD64, r::RoundingMode; sigdigits=Integer=0, base = 10) = FloatD64(round(Float128(x), r; sigdigits=sigdigits, base=base))
+=#
 
 #=
   round([T,] x, [r::RoundingMode])
