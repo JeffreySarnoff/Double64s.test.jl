@@ -49,6 +49,36 @@ Base.round(x::FloatD64, r::RoundingMode; digits=Integer=0, base = 10) = FloatD64
 Base.round(x::FloatD64, r::RoundingMode; sigdigits=Integer=0, base = 10) = FloatD64(round(Float128(x), r; sigdigits=sigdigits, base=base))
 =#
 
+Base.hidigit(x::FloatD64) = Base.hidigit(Hi(x))
+
+#=
+# NOTE: this relies on the current keyword dispatch behaviour (#9498).
+function Base.round(x::FloatD64, r::RoundingMode=RoundNearest;
+               digits::Union{Nothing,Integer}=nothing, sigdigits::Union{Nothing,Integer}=nothing, base::Union{Nothing,Integer}=nothing)
+    if digits === nothing
+        if sigdigits === nothing
+            if base === nothing
+                # avoid recursive calls
+                throw(MethodError(round, (x,r)))
+            else
+                round(x,r)
+                # or throw(ArgumentError("`round` cannot use `base` argument without `digits` or `sigdigits` arguments."))
+            end
+        else
+            isfinite(x) || return float(x)
+            _round_sigdigits(x, r, sigdigits, base === nothing ? 10 : base)
+        end
+    else
+        if sigdigits === nothing
+            isfinite(x) || return float(x)
+            _round_digits(x, r, digits, base === nothing ? 10 : base)
+        else
+            throw(ArgumentError("`round` cannot use both `digits` and `sigdigits` arguments."))
+        end
+    end
+end
+=#
+
 #=
   round([T,] x, [r::RoundingMode])
   round(x, [r::RoundingMode]; digits::Integer=0, base = 10)
