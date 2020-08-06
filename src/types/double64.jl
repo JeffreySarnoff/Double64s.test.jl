@@ -65,6 +65,9 @@ see: [`Hi`](@ref), [`HiLo`](@ref)
 """
 Lo(x::FloatD64) = x.hilo[2]
 
+const NaND64 = FloatD64((NaN, NaN))
+const InfD64 = FloatD64((Inf, Inf))
+
 Base.issubnormal(x::FloatD64) = issubnormal(Hi(x))
 
 Base.floatmin(::Type{FloatD64}) = FloatD64(floatmin(Float64))
