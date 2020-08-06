@@ -9,26 +9,22 @@ for T in (:FloatD64, :ComplexD64)
   end
 end
 
-function Base.iseven(x::Float64)
-    !isinteger(x) && return false
-    absx = abs(x)
-    if absx < typemax(Int64)
-       iseven(Int64(x))
-    elseif absx < typemax(Int128)
-       iseven(Int128(x))
-    else
-       iseven(BigInt(x))
-    end
-end
+for F in (:iseven, :isodd)
+  for T in (:Float64, :FloatD64)
+    @eval begin
 
-function Base.isodd(x::Float64)
-    !isinteger(x) && return false
-    absx = abs(x)
-    if absx < typemax(Int64)
-       isodd(Int64(x))
-    elseif absx < typemax(Int128)
-       isodd(Int128(x))
-    else
-       isodd(BigInt(x))
+      function Base.$F(x::$T)
+          !isinteger(x) && return false
+          absx = abs(x)
+          if absx < typemax(Int64)
+            $F(Int64(x))
+          elseif absx < typemax(Int128)
+             $F(Int128(x))
+          else
+             $F(BigInt(x))
+          end
+      end
+
     end
+  end
 end
