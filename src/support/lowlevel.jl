@@ -86,7 +86,7 @@ u = 2^(-p) == ulp(1.0)/2 # roundoff error unit
 =#
 
 ulp(x::Float64) = ldexp(ufp(x), -52) # or eps(x)
-uls(x::Float64) = ldexp(ufp(x), trailing_zeros(reinterpret(UInt64,significand(x))))
+uls(x::Float64) = ldexp(ufp(x), -trailing_zeros(reinterpret(UInt64,significand(x))))
 
 
 
