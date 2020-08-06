@@ -5,39 +5,25 @@ for T in (:Float64, :Float32, :Float16, :Int128, :Int64, :Int32, :Int16, :Int8)
   @eval begin
     Base.promote_rule(::Type{FloatD64}, ::Type{$T}) = FloatD64
     Base.convert(::Type{FloatD64}, x::$T) = FloatD64(x)
+    Base.convert(::Type{$T}, x::FloatD64) = $T(x)
   end
 end
 
-function Base.convert(::Type{BigFloat}, x::FloatD64)
-   hi, lo = HiLo(x)
-   return BigFloat(hi) + BigFloat(lo)
-end
+for T in (:BigFloat, :BigInt, :Float128)
+  @eval begin
+    Base.promote_rule(::Type{FloatD64}, ::Type{$T}) = $T
+    Base.convert(::Type{FloatD64}, x::$T) = FloatD64(x)
+    Base.convert(::Type{$T}, x::FloatD64) = $T(x)
+  end   
+end  
 
 function Base.convert(::Type{Complex{BigFloat}}, x::ComplexD64)
    re, im = ReIm(x)
    return Complex{BigFloat}(BigFloat(re), BigFloat(im))
 end
 
-function Base.convert(::Type{Float128}, x::FloatD64)
-   hi, lo = HiLo(x)
-   return Float128(hi) + Float128(lo)
-end
-
 function Base.convert(::Type{Complex{Float128}}, x::ComplexD64)
-   re, im = ReIm(x)
-   return Complex{Float128}(Float128(re), Float128(im))
-end
-
-function Base.convert(::Type{FloatD64}, x::BigFloat)
-    hi = Float64(x)
-    lo = Float64(x - hi)
-    return FloatD64((hi, lo))
-end
-
-function Base.convert(::Type{FloatD64}, x::Float128)
-    hi = Float64(x)
-    lo = Float64(x - hi)
-    return FloatD64((hi, lo))
+   return Complex{Float128}(Float128(x.re), Float128(x.im))
 end
 
 function Base.convert(::Type{ComplexD64}, x::Complex{BigFloat})
@@ -51,4 +37,3 @@ function Base.convert(::Type{ComplexD64}, x::Complex{Float128})
     im = FloatD64(imag(x))
     return ComplexD64((re, im))
 end
-
