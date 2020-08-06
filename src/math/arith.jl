@@ -90,12 +90,10 @@ function Base.:(*)(x::Float64, y::FloatD64)
     return FloatD64((hi, lo))
 end
 
-dividealg = parse(Int,ENV["dividealg"])
-
-if dividealg == 0
     
 # from DoubleFloats
-Base.:(/)(x::FloatD64, y::FloatD64) = FloatD64(divide_dddd_dd(Hi(x), Lo(x), Hi(y), Lo(y)))
+# Base.:(/)(x::FloatD64, y::FloatD64) = FloatD64(divide_dddd_dd(Hi(x), Lo(x), Hi(y), Lo(y)))
+(div0)(x::FloatD64, y::FloatD64) = FloatD64(divide_dddd_dd(Hi(x), Lo(x), Hi(y), Lo(y)))
 
 @inline function divide_dddd_dd(xhi::T, xlo::T, yhi::T, ylo::T) where {T<:Float64}
     hi = xhi / yhi
@@ -105,7 +103,17 @@ Base.:(/)(x::FloatD64, y::FloatD64) = FloatD64(divide_dddd_dd(Hi(x), Lo(x), Hi(y
     return hi, lo
 end
 
-elseif dividealg == 17
+function (div17)(x::FloatD64, y::FloatD64)
+    xhi, xlo = HiLo(x)
+    yhi, ylo = HiLo(y)
+    thi = xhi / yhi
+    rhi, rlo = DWTimesFP1(yhi, ylo, thi)
+    dhi = xhi - rhi
+    dlo = xlo - rlo
+    d = dhi + dlo
+    tlo = d / yhi
+    return FloatD64(two_hilo_sum(thi, tlo))
+end
         
 # Algorithm 17 from [Joldes, Muller, Popescu 2017]
 function Base.:(/)(x::FloatD64, y::FloatD64)
@@ -120,7 +128,19 @@ function Base.:(/)(x::FloatD64, y::FloatD64)
     return FloatD64(two_hilo_sum(thi, tlo))
 end
 
-elseif dividealg == 18
+
+function (div18)(x::FloatD64, y::FloatD64)
+    yhi, ylo = HiLo(y)
+    th = inv(yhi)
+    rh = fma(-yhi, th, 1.0)
+    rl = -ylo * th
+    eh, el = two_hilo_sum(rh, rl)
+    dh, dl = DWTimesFP3(eh, el, th) # (eh, el) * rh
+    mh, ml = DWPlusFP(dh, dl, th) # (dh, dl) + th
+    zh, zl = DWTimesDW2(Hi(x), Lo(x), mh, ml) # (xh, xl) * (mh, ml)
+    return FloatD64((zh, zl))
+end
+
 
 # relative error < 9.8u², 31 FP Ops, 100.7 bits (relative)
 # " 5.922 x 2^(-106) "
@@ -137,7 +157,7 @@ function Base.:(/)(x::FloatD64, y::FloatD64)
     return FloatD64((zh, zl))
 end
 
-end # dividealg
+
 
     biterror(::typeof(/)) = 5.922
 biterror(::typeof(inv)) = 5.922
