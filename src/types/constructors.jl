@@ -1,7 +1,11 @@
-FloatD64(x::T) where {T<:Union{Float64, Float32, Float16, Int32, Int16, Int8}} =
-    FloatD64((Float64(x), 0.0))
+FloatD64(x::Float64) = FloatD64((x, 0.0))
 
-function FloatD64(x::T) where {T<:Union{Int64,Int128,Float128}}
+for T in (:Float32, :Float16, :Int32, :Int16, :Int8)
+    @eval FloatD64((Float64(x), 0.0))
+end    
+
+for T in (:Int64, :Int128)
+  @eval function FloatD64(x::$T)
     if abs(x) <= maxintfloat(Float64)
         hi = Float64(x)
         lo = 0.0
@@ -11,9 +15,16 @@ function FloatD64(x::T) where {T<:Union{Int64,Int128,Float128}}
         lo = Float64(bf - hi)
     end
     return FloatD64((hi, lo))
+  end      
 end
 
 function FloatD64(x::BigFloat)
+    hi = Float64(x)
+    lo = Float64(x - hi)
+    return FloatD64((hi, lo))
+end
+
+function FloatD64(x::Float128)
     hi = Float64(x)
     lo = Float64(x - hi)
     return FloatD64((hi, lo))
