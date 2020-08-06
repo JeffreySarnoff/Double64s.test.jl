@@ -41,3 +41,30 @@ function Base.round(x::FloatD64, ::RoundingMode{:NearestTiesUp})
     return round(x + 0.5, RoundNearest)
 end
 Base.round(::Type{T}, x::FloatD64, ::RoundingMode{:NearestTiesUp}) where {T<:Integer} = T(round(x, RoundNearestTiesUp))
+
+Base.round(x::FloatD64; digits::Integer=0, base = 10) = FloatD64(round(Float128(x); digits=digits, base=base))
+Base.round(x::FloatD64; sigdigits::Integer=0, base = 10) = FloatD64(round(Float128(x); sigdigits=sigdigits, base=base))
+Base.round(x::FloatD64, r::RoundingMode; digits=Integer=0, base = 10) = FloatD64(round(Float128(x), r; digits=digits, base=base))
+Base.round(x::FloatD64, r::RoundingMode; sigdigits=Integer=0, base = 10) = FloatD64(round(Float128(x), r; sigdigits=sigdigits, base=base))
+
+#=
+
+  round([T,] x, [r::RoundingMode])
+  round(x, [r::RoundingMode]; digits::Integer=0, base = 10)
+  round(x, [r::RoundingMode]; sigdigits::Integer, base = 10)
+
+  Rounds the number x.
+
+  Without keyword arguments, x is rounded to an integer value, returning a value of type T, or of the same type of x
+  if no T is provided. An InexactError will be thrown if the value is not representable by T, similar to convert.
+
+  If the digits keyword argument is provided, it rounds to the specified number of digits after the decimal place (or
+  before if negative), in base base.
+
+  If the sigdigits keyword argument is provided, it rounds to the specified number of significant digits, in base
+  base.
+
+  The RoundingMode r controls the direction of the rounding; the default is RoundNearest, which rounds to the nearest
+  integer, with ties (fractional values of 0.5) being rounded to the nearest even integer. Note that round may give
+  incorrect results if the global rounding mode is changed (see rounding).
+=#
