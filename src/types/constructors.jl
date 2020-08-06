@@ -32,10 +32,9 @@ FloatD64(x::Real, y::Real) = FloatD64(Float64(x), Float64(y))
 FloatD64(x::ComplexD64) = real(x)
 FloatD64(x::ComplexF64) = FloatD64(real(x))
 
-ComplexD64(x::T) where {T<:Real} = ComplexD64(FloatD64(x))
-
-ComplexD64(x::T1, y::T2) where {T1<:Real, T2<:Real} =
-    ComplexD64( FloatD64(x), FloatD64(y) )
+ComplexD64(x::Float64) = ComplexD64(FloatD64(x))
+ComplexD64(x::Float64, y::Float64) = ComplexD64( FloatD64(x), FloatD64(y) )
+ComplexD64(x::ComplexF64) = ComplexD64(x.re, x.im)
 
 # inverse constructors
 Base.Float64(x::FloatD64) = Hi(x)
