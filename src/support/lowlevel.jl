@@ -92,6 +92,15 @@ function uls(x::Float64)
     return ldexp(ufp(x), -k)
 end    
 
+# -------------------------------------------------------
+
+# significant_significand_bits(x::Float64) 
+ssbits(x::Float64) = 
+    exponent(x) - (x >= 1.0) +
+    (54 - trailing_zeros(reinterpret(UInt64, x)))
+
+
+# --------------------------------------------------------
 
 function nearestint(x::T) where {T<:Union{Float64, FloatD64}}
     s, absx = signbit(x), abs(x)
