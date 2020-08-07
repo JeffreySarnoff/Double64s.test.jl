@@ -400,3 +400,130 @@ julia> function accurateargreduction(x, z, C1, C2)
 
 https://github.com/tholden/DoubleDouble/blob/master/DoubleDouble.m
 =#
+#=
+https://www.pseudorandom.com/implementing-exp
+
+def reduced_taylor_exp(x):
+    """
+    Evaluates f(x) = e^x for any x in the interval [-709, 709].
+    If x < -709 or x > 709, raises an assertion error because of
+    underflow/overflow limits. Performs a range reduction step
+    by applying the identity e^x = e^r * 2^k for |r| <= 1/2 log(2)
+    and positive integer k. e^r is approximated using a Taylor series
+    truncated at 14 terms, which is enough because e^r is in the
+    interval [0, 1/2 log(2)]. The result is left shifted by k
+    to obtain e^r * 2^k = e^x.
+    Performance: In the worst case we have 51 operations:
+    - 16 multiplications
+    - 16 divisions
+    - 14 additions
+    - 2 subtractions
+    - 1 rounding
+    - 1 left shift
+    - 1 absolute value
+    Accuracy: Over a sample of 10,000 equi-spaced points in
+    [-709, 709] we have the following statistics:
+    - Max relative error = 7.98411243625574e-14
+    - Min relative error = 0.0
+    - Avg relative error = 1.7165594254816366e-14
+    - Med relative error = 1.140642685235478e-14
+    - Var relative error = 2.964698541882666e-28
+    - 6.29 percent of the values have less than 14 digits of precision
+    :param x: (int) or (float) power of e to evaluate
+    :return: (float) approximation of e^x
+    """
+    # If x is not a valid value, exit early
+    assert(-709 <= x <= 709)
+    # If x = 0, we know e^x = 1 so exit early
+    if x == 0:
+        return 1
+    # Normalize x to a positive value since we can use reciprocal
+    # symmetry to only work on positive values. Keep track of
+    # the original sign for return value
+    x0 = np.abs(x)
+    # Hard code the value of natural log(2) in double precision
+    l = 0.6931471805599453
+    # Solve for an integer k satisfying x = k log(2) + r
+    k = math.ceil((x0 / l) - 0.5)
+    # p = 2^k
+    p = 1 << k
+    # r is a value between 0 and 0.5 log(2), inclusive
+    r = x0 - (k * l)
+    # Setup the Taylor series to evaluate e^r after
+    # range reduction x -> r. The Taylor series
+    # only approximates on the interval [0, log(2)/2]
+    Tn = 1
+    # We need at most 14 terms to achieve 16 digits
+    # of precision anywhere on the interval [0, log(2)/2]
+    for i in range(14, 0, -1):
+        Tn = Tn * (r / i) + 1
+    # e^x = e^r * 2^k, so multiply p by Tn. This loses us
+    # about two digits of precision because we compound the
+    # relative error by 2^k.
+    p *= Tn
+    # If the original sign is negative, return reciprocal
+    if x < 0:
+        p = 1 / p
+    return p
+
+
+double reduced_taylor_exp(double x) {
+    /*
+     * Evaluates f(x) = e^x for any x in the interval [-709, 709].
+     * If x < -709 or x > 709, raises an assertion error. Performs a
+     * range reduction step by applying the identity e^x = e^r * 2^k
+     * for |r| <= 1/2 log(2) and positive integer k. e^r is evaluated
+     * using Taylor series truncated at 14 terms, which is sufficient
+     * to achieve 16 digits of precision for r so close to 0. The
+     * result is left shifted by k to obtain e^r * 2^k = e^x.
+     * Performance: In the worst case we have 51 operations:
+     * - 16 multiplications
+     * - 16 divisions
+     * - 14 additions
+     * - 2 subtractions
+     * - 1 rounding
+     * - 1 left shift
+     * - 1 absolute value
+     * Accuracy: Over a sample of 10,000 linearly spaced points in
+     * [-709, 709], we have the following error statistics:
+     * - Max relative error = 7.99528e-14
+     * - Min relative error = 0
+     * - Avg relative error = 0
+     * - Med relative error = 2.27878e-14
+     * - Var relative error = 0
+     * - 6.4 percent of the values have less than 14 digits of precision.
+     * Args:
+     *      - x (double float) power of e to evaluate
+     * Returns:
+     *      - (double float) approximation of e^x
+     */
+    // Make sure x is a valid input
+    assert(-709 <= x && x <= 709);
+    // When x is 0, we know e^x is 1
+    if (x == 0) {
+        return 1;
+    }
+    // Normalize x to a positive value to take advantage of
+    // reciprocal symmetry, but keep track of the original value
+    double x0 = abs(x);
+    // Solve for k satisfying x = 2^k * log(2) r, with |r| <= 1/2 log(2)
+    int k = ceil((x0 / M_LN2) - 0.5);
+    // Determine r using the k we computed
+    double r = x0 - (k * M_LN2);
+    // Setup the Taylor series to evaluate e^r after range reduction
+    // x -> r. This only approximates over the interval [0, 1/2 log(2)]
+    double tk = 1.0;
+    double tn = 1.0;
+    // We only need 14 terms to achieve 16 digits of precision for e^r
+    for (int i = 1; i < 14; i++) {
+        tk *= r / i;
+        tn += tk;
+    };
+    tn = tn * pow2(k);
+    if (x < 0) {
+        return 1 / tn;
+    }
+    return tn;
+}
+
+=#
