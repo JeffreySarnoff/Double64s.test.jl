@@ -3,6 +3,31 @@
    The associaed functions `expm1(x)` and `expm1(z)`.
 =#
 
+const Ln2 = FloatD64((0.6931471805599453, 2.3190468138462996e-17))
+
+function exp_specialvalues(x::Float64)
+   isnan(x) && return x
+   absx = abs(x)
+   absx > 709.0 && return signbit(x) ? -InfD64 : InfD64
+   abx < 2.0^-257 && return one(FloatD64)
+   return nothing
+end
+
+function Base.exp(x::FloatD64)
+   exp_specialvalues(Hi(x))
+   # 4.3108e-78 <= absx < 709.9
+   absx = abs(x)
+   
+   # Solve for k satisfying x = 2^k * log(2) r
+   #   with |r| <= 1/2 log(2)
+   k = ceil(Int64, (absx / Ln2) - 0.5)
+   # p = 2^k
+   p = Int64(1) << k
+   # Determine r using the k we computed
+   r = absx - (k * Ln2)
+  
+end
+
 #=
    source: Efficient implementation of elementary functions in the medium-precision range
            by Fredrik Johansson
