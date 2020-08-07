@@ -552,3 +552,78 @@ double reduced_taylor_exp(double x) {
 }
 
 =#
+
+#=
+kv-master
+
+	friend dd exp(const dd& x) {
+		dd x_i, x_f, tmp;
+		dd r, y;
+		int i;
+
+		if (x == dd(std::numeric_limits<double>::infinity(), 0.)) {
+			return dd(std::numeric_limits<double>::infinity(), 0.);
+		}
+		if (x == -dd(std::numeric_limits<double>::infinity(), 0.)) {
+			return (dd)0.;
+		}
+
+		if (x >= 0.) {
+			x_i = floor(x);
+			x_f = x - x_i;
+			if (x_f >= 0.5) {
+				x_f -= 1.;
+				x_i += 1.;
+			}
+		} else {
+			x_i = -floor(-x);
+			x_f = x - x_i;
+			if (x_f <= -0.5) {
+				x_f += 1.;
+				x_i -= 1.;
+			}
+		}
+
+		r = 1.;
+		y = 1.;
+		for (i=1;  i<=25 ; i++) {
+			y *= x_f;
+			y /= i;
+			r += y;
+		}
+
+		if (x_i >= 0.) {
+			// r *= pow(constants<dd>::e(), (int)x_i);
+			r *= ipower(e(), (double)x_i);
+		} else {
+			// r /= pow(constants<dd>::e(), -(int)x_i);
+			r /= ipower(e(), -(double)x_i);
+		}
+
+		return r;
+	}
+
+	static dd expm1_origin(const dd& x) {
+		dd r, y;
+		int i;
+
+		r = 0.;
+		y = 1.;
+		for (i=1; i<=25 ; i++) {
+			y *= x;
+			y /= i;
+			r += y;
+		}
+
+		return r;
+	}
+
+	friend dd expm1(const dd& x) {
+		if (x >= -0.5 && x <= 0.5) {
+			return expm1_origin(x);
+		} else {
+			return exp(x) - 1.;
+		}
+	}
+
+=#
