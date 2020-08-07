@@ -556,6 +556,52 @@ double reduced_taylor_exp(double x) {
 #=
 kv-master
 
+```
+
+julia> x
+FloatD64((19.73721077166514, -1.6936500472509631e-15))
+
+julia> x/Ln2
+FloatD64((28.474776101261526, -8.19680688222626e-17))
+
+julia> xoLn2 = ans
+FloatD64((28.474776101261526, -8.19680688222626e-17))
+
+julia> x_i = floor(x)
+FloatD64((19.0, 0.0))
+
+julia> x_f = x - x_i
+FloatD64((0.7372107716651383, -2.831551031322832e-17))
+
+julia> x_f = x_f - 1
+FloatD64((-0.2627892283348618, 2.7195640918029507e-17))
+
+julia> x_i = x_i + 1
+FloatD64((20.0, 0.0))
+
+julia> r = y = FloatD64(1);
+
+julia> for i=1:25
+         y = y * x_f
+         y = y / i
+                  r = r + y
+       end
+
+julia> x_i
+FloatD64((20.0, 0.0))
+
+julia> e1 = FloatD64(exp(BigFloat(1)))
+FloatD64((2.718281828459045, 1.4456468917292502e-16))
+
+julia> e2 = FloatD64(BigFloat(e1)^BigFloat(x_i))
+FloatD64((4.851651954097903e8, 4.880277289790481e-10))
+
+julia> r2 = r * e2
+FloatD64((3.730454319498937e8, -6.494042474083988e-10))
+
+julia> expa = FloatD64(exp(BigFloat(a)))
+FloatD64((3.730454319498937e8, -6.49404247408404e-10))
+```
 	friend dd exp(const dd& x) {
 		dd x_i, x_f, tmp;
 		dd r, y;
@@ -627,3 +673,18 @@ kv-master
 	}
 
 =#
+
+#=
+   function expsmall6(v)
+    t1 = v ^ 2
+    t5 = t1 ^ 2
+    t13 = t5 ^ 2
+    return(1 + v + (3 + v) * t1 / 6 + (5 + v) * t5 / 120 + (7 + v) * t1 * t5 / 5040 + (9 + v) * t13 / 362880 + (11 + v) * t1 * t13 / 39916800 + (13 + v) * t5 * t13 / 6227020800)
+   end
+
+   function expsmall8horner(v)
+      1 + (1 + (1//2 + (1//6 + (1//24 + (1//120 + (1//720 + (1//5040 + (1//40320 + (1//362880 + (1//3628800 + (1//39916800 + (1//479001600 + (1//6227020800 + 
+          (1//87178291200 + v / 1307674368000) * v) * v) * v) * v) * v) * v) * v) * v) * v) * v) * v) * v) * v) * v
+    end
+=#
+
