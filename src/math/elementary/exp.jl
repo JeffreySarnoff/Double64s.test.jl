@@ -347,3 +347,56 @@ julia> function accurateargreduction(x, z, C1, C2)
    function exp(x)
       signbit(x) && return inv(exp(abs(x))
 =#
+
+#=
+ function v = exp( v )
+            if ~isreal( v )
+                [ sin_imag_v, cos_imag_v ] = sincos( imag( v ) );
+                v = exp( real( v ) ) .* ( cos_imag_v + 1i .* sin_imag_v );
+                return
+            end
+            
+            % Strategy:  We first reduce the size of x by noting that
+            % exp(kr + m * log(2)) = 2^m * exp(r)^k
+            % where m and k are integers.  By choosing m appropriately
+            % we can make |kr| <= log(2) / 2 = 0.347.  Then exp(r) is 
+            % evaluated using the familiar Taylor series.  Reducing the 
+            % argument substantially speeds up the convergence.
+            k = 512.0;
+            inv_k = 1.0 / k;
+            Threshhold = inv_k .* DoubleDouble.eps.v1;
+
+            m = floor( v.v1 ./ DoubleDouble.log_2.v1 + 0.5 );
+            r = TimesPowerOf2( v - DoubleDouble.log_2 .* m, inv_k );
+
+            p = r .* r;
+            s = r + TimesPowerOf2( p, 0.5 );
+            p = p .* r;
+            t = p .* DoubleDouble.Make( DoubleDouble.InverseFactorial( 1, 1 ), DoubleDouble.InverseFactorial( 1, 2 ) );
+            for i = 2 : DoubleDouble.NInverseFactorial
+                s = s + t;
+                p = p .* r;
+                t = p .* DoubleDouble.Make( DoubleDouble.InverseFactorial( i, 1 ), DoubleDouble.InverseFactorial( i, 2 ) );
+                if all( abs( t.v1(:) ) <= Threshhold )
+                    break
+                end
+            end
+
+            s = s + t;
+
+            s = TimesPowerOf2( s, 2.0 ) + s .* s;
+            s = TimesPowerOf2( s, 2.0 ) + s .* s;
+            s = TimesPowerOf2( s, 2.0 ) + s .* s;
+            s = TimesPowerOf2( s, 2.0 ) + s .* s;
+            s = TimesPowerOf2( s, 2.0 ) + s .* s;
+            s = TimesPowerOf2( s, 2.0 ) + s .* s;
+            s = TimesPowerOf2( s, 2.0 ) + s .* s;
+            s = TimesPowerOf2( s, 2.0 ) + s .* s;
+            s = TimesPowerOf2( s, 2.0 ) + s .* s;
+            s = s + 1.0;
+            
+            v = DoubleDouble.Make( pow2( s.v1, m ), pow2( s.v2, m ) );
+        end
+
+https://github.com/tholden/DoubleDouble/blob/master/DoubleDouble.m
+=#
