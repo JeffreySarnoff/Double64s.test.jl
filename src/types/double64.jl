@@ -41,8 +41,11 @@ struct FloatD64 <: AbstractFloat
     hilo::Tuple{Float64, Float64}
 end
 
-FloatD64(x::FloatD64) = x
+# indirect initialization
 FloatD64(x::Float64, y::Float64) = FloatD64(two_sum(x,y))
+
+# idempotency
+FloatD64(x::FloatD64) = x
 
 """
    HiLo(x)
@@ -73,14 +76,12 @@ Lo(x::FloatD64) = x.hilo[2]
 
 const NaND64 = FloatD64((NaN, NaN))
 const InfD64 = FloatD64((Inf, Inf))
-
-Base.issubnormal(x::FloatD64) = issubnormal(Hi(x))
+const NegInfD64 = FloatD64((-Inf, -Inf))
 
 Base.floatmin(::Type{FloatD64}) = FloatD64(floatmin(Float64))
 Base.floatmax(::Type{FloatD64}) = FloatD64(floatmax(Float64))
-Base.typemin(::Type{FloatD64}) = FloatD64(typemin(Float64))
-Base.typemax(::Type{FloatD64}) = FloatD64(typemax(Float64))
-
+Base.typemin(::Type{FloatD64})  = FloatD64(typemin(Float64))
+Base.typemax(::Type{FloatD64})  = FloatD64(typemax(Float64))
 Base.maxintfloat(::Type{FloatD64}) = FloatD64(maxintfloat(Float64))
 
 """
