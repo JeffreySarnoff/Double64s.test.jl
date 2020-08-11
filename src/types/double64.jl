@@ -9,16 +9,22 @@ There are more than three approaches, here are three:
 (a) make the value part of the struct a 2-Tuple
   - use the constructor that takes a 2-Tuple as the immediate initializer
   - use the constructor that takes 2 Float64s as the indirect initializer
-(b) use two structs, one for internal purposes only
+(b) use a singleton with inner constructors
+   - the vanilla constructor uses indirect initialization
+   - the constructor with the singleton arg uses direct initialization
+(c) use two structs, one for internal purposes only
    - the internal struct is initialized immediately
    - the API struct is initialized indirectly
-(c) use a parameterized struct
+(d) use a parameterized struct
    - one parameter value signifies immediate initialization
    - another parameter value signifies indirect initialization
 
-(c) gets messier than necessary (more difficult to maintain)
 
-(b) requires a good deal of interconversion (so likely slower)
+(d) gets messier than necessary (more difficult to maintain)
+
+(c) requires a good deal of interconversion (so likely slower)
+
+(b) works well, it is more verbose than (a)
 
 (a) is implemented
 =#
