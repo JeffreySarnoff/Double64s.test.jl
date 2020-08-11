@@ -41,7 +41,7 @@ struct FloatD64 <: AbstractFloat
     hilo::Tuple{Float64, Float64}
 end
 
-# indirect initialization
+# indirect initialization (two_sum returns a 2-Tuple)
 FloatD64(x::Float64, y::Float64) = FloatD64(two_sum(x,y))
 
 # idempotency
