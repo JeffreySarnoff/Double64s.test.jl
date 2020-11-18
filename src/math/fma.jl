@@ -55,3 +55,22 @@ for T in (:FloatD64, :ComplexD64)
       return x*y + z
    end
 end
+
+#=
+   Quadruple-precision BLAS using Bailey's arithmetic with FMA instruction
+   by S. Yamada, t. Ina, N. Sasa, Y.Idomura, M. Machida, T. Imamura
+   2017 IEEE International Parallel and Distributed Processing Symposium Workshops
+=#
+
+function Base:(*)(ahi::T, alo::T, bhi::T, blo::T) where {T<:Float64}
+   p1 = ahi * bhi
+   p2 = fma(ahi, bhi, -p1)
+   p2 += alo*bhi + ahi*blo
+   chi = p1 + p2
+   clo = p2 - (chi - p1)
+   return FloatD64((chi, clo))
+end
+
+@inline function Base:(*)(a::T, b::T) where {T<:FloatD64}
+   return (*)(Hi(a), Lo(a), Hi(b), Lo(b))
+end
