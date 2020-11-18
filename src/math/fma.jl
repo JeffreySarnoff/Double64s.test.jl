@@ -1,3 +1,34 @@
+#=
+S. Boldo and J.M. Muller, 
+Exact and Approximated Error of the FMA, 
+IEEE Transactions on Computers, 60(2011), 157–164.
+
+function fma_with_error(a::Float64, b::Float64, c::Float64)
+    hi  = fma(a, b, c)
+    u1, u2 = two_prod(a, b)
+    v1, v2 = two_sum(c, u2)
+    w1, w2 = two_sum(u1, v1)
+    t = w1 - hi + w2
+    md, lo = two_hilo_sum(t, v2)
+    return hi, md, lo
+end
+
+  (a * b) + c == hi + md + lo
+   fma(a,b,c) == hi
+   |md + lo| = unit_roundoff_error(|hi|)/2
+   |lo| = unit_roundoff_error(|md|)/2
+
+function two_fma(a::Float64, b::Float64, c::Float64)
+    hi  = fma(a, b, c)
+    u1, u2 = two_prod(a, b)
+    v1, v2 = two_sum(c, u2)
+    w1, w2 = two_sum(u1, v1)
+    md = (w1 - hi + w2) + v2
+    return hi, md
+end
+
+=#
+
 function Base.fma(xhi::T, xlo::T, yhi::T, ylo::T, zhi::T, zlo::T) where {T<:Float64}
    chi, c1 = two_prod(xhi, yhi)
    t0 = xlo * ylo
