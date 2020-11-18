@@ -32,6 +32,7 @@ abs2(Hi(x))
 
 include("types/double64.jl")
 include("types/constructors.jl")
+include("support/fast_minmax.jl")
 include("types/comparison.jl")
 include("types/promotion.jl")
 include("types/predicates.jl")
