@@ -79,7 +79,7 @@ const InfD64 = FloatD64((Inf, Inf))
 const NegInfD64 = FloatD64((-Inf, -Inf))
 
 Base.floatmin(::Type{FloatD64}) = FloatD64(floatmin(Float64))
-Base.floatmax(::Type{FloatD64}) = FloatD64(floatmax(Float64))
+Base.floatmax(::Type{FloatD64}) = FloatD64((floatmax(Float64), (floatmax(Float64) * (2^(-53)))))
 Base.typemin(::Type{FloatD64})  = FloatD64(typemin(Float64))
 Base.typemax(::Type{FloatD64})  = FloatD64(typemax(Float64))
 Base.maxintfloat(::Type{FloatD64}) = FloatD64(maxintfloat(Float64))
