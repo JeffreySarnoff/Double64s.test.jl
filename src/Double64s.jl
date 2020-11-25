@@ -1,7 +1,7 @@
 """
     Double64s is a package
 
-exported types: [`FloatD64`](@ref), [`ComplexD64`](@ref), [`FloatComplexD64`](@ref)
+exported types: [`FloatD64`](@ref), [`ComplexD64`](@ref)
 
 exported field accessors: [`Hi`](@ref), [`Lo`](@ref), [`HiLo`](@ref)
 """
