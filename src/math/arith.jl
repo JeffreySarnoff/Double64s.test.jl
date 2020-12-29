@@ -103,20 +103,6 @@ end
     return hi, lo
 end
 
-#=
-function (div17)(x::FloatD64, y::FloatD64)
-    xhi, xlo = HiLo(x)
-    yhi, ylo = HiLo(y)
-    thi = xhi / yhi
-    rhi, rlo = DWTimesFP1(yhi, ylo, thi)
-    dhi = xhi - rhi
-    dlo = xlo - rlo
-    d = dhi + dlo
-    tlo = d / yhi
-    return FloatD64(two_hilo_sum(thi, tlo))
-end
-=#
-
 # Algorithm 17 from [Joldes, Muller, Popescu 2017]
 # relative error <= 15u² + 56u³
 function div17(x::FloatD64, y::FloatD64)
