@@ -18,10 +18,10 @@ function fast_max(x::Float64, y::Float64)
     signbit(x_minus_y) ? y : ifelse(!isnan(x_minus_y), x, NaN64)
 end
 
-function unsafe_minmax(x::T, y::T) where {T<:FastFloat} 
+function unsafe_minmax(x::Float64, y::Float64) 
     (unsafe_min(x,y), unsafe_max(x,y))
 end
 
-function unsafe_maxmin(x::T, y::T) where {T<:FastFloat}
+function unsafe_maxmin(x::Float64, y::Float64)
     (signbit(y-x) || isnan(x)) ? (x,y) : (y,x)
 end
