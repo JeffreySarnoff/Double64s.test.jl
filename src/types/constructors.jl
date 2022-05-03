@@ -69,3 +69,5 @@ end
 
 Float128(x::FloatD64) = Float128(Hi(x)) + Float128(Lo(x))
 FloatD64(x::Float128) = FloatD64((Float64(x), Float64(x-Float64(x))))
+ComplexD64(x::ComplexF128) = (FloatD64(real(x)), FloatD64(imag(x)))
+ComplexF128(x::ComplexD64) = ComplexF128(real(x), imag(x))
