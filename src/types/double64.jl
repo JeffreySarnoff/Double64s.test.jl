@@ -95,7 +95,7 @@ A complex value formed or FloatD64 real and imaginary parts
 Also a constructor for that.
 """ 
 
-struct ComplexD64 <: Complex
+struct ComplexD64 <: Number
     hilo::Tuple{Complex{Float64}, Complex{Float64}}
 end
 
