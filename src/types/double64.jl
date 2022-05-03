@@ -46,7 +46,8 @@ FloatD64(x::FloatD64) = x   # idempotent
 # indirect initialization (two_sum returns a 2-Tuple)
 FloatD64(x::Float64, y::Float64) = FloatD64(two_sum(x,y))
 
-# with a single Float64
+# initialization with a single value
+
 FloatD64(x::Float64) = FloatD64(x, 0.0)
 
 FloatD64(x::T) where {T<:Union{Float16, Float32}} = FloatD64(Float64(x))
