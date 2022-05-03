@@ -77,6 +77,11 @@ see: [`Hi`](@ref), [`HiLo`](@ref)
 """
 Lo(x::FloatD64) = x.hilo[2]
 
+const ZeroD64 = FloatD64((0.0, 0.0))
+const HalfD64 = FloatD64((0.5, 0.0))
+const OneD64 = FloatD64((1.0, 0.0))
+const TwoD64 = FloatD64((2.0, 0.0))
+
 const NaND64 = FloatD64((NaN, NaN))
 const InfD64 = FloatD64((Inf, Inf))
 const NegInfD64 = FloatD64((-Inf, -Inf))
