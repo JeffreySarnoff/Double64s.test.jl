@@ -3,97 +3,97 @@
 # rel accuracy [102.4, 104.4] bits
 # "The largest relative error we have obtain through many tests is around 2.25 × 2^−2p = 2.25 u^2.
 #  For Float64, this is 2.25*2^(-106) [rel accuracy 104.8 bits]." pg 11
-function Base.:(+)(x::FloatD64, y::FloatD64) 
+function Base.:(+)(x::Double64, y::Double64) 
     hi, lo   = two_sum(Hi(x), Hi(y))
     thi, tlo = two_sum(Lo(x), Lo(y))
     c = lo + thi
     hi, lo = two_hilo_sum(hi, c)
     c = tlo + lo
     hi, lo = two_hilo_sum(hi, c)
-    return FloatD64((hi, lo))
+    return Double64((hi, lo))
 end
 
 biterror(::typeof(+)) = 2.25
 
-function Base.:(+)(x::FloatD64, y::Float64) 
+function Base.:(+)(x::Double64, y::Float64) 
     hi, lo = two_sum(Hi(x), y)
     c = lo + Lo(x)
     hi, lo = two_hilo_sum(hi, c)
-    return FloatD64((hi, lo))
+    return Double64((hi, lo))
 end
 
-function Base.:(+)(x::Float64, y::FloatD64) 
+function Base.:(+)(x::Float64, y::Double64) 
     hi, lo = two_sum(x, Hi(y))
     c = lo + Lo(y)
     hi, lo = two_hilo_sum(hi, c)
-    return FloatD64((hi, lo))
+    return Double64((hi, lo))
 end
 
 # relative error < 3u², 20 FP Ops, 102.4 bits (relative)
 # Algorithm 6 from [Joldes, Muller, Popescu 2017]
 # reworked for subtraction
-function Base.:(-)(x::FloatD64, y::FloatD64)
+function Base.:(-)(x::Double64, y::Double64)
     hi, lo   = two_diff(Hi(x), Hi(y))
     thi, tlo = two_diff(Lo(x), Lo(y))
     c = lo + thi
     hi, lo = two_hilo_sum(hi, c)
     c = tlo + lo
     hi, lo = two_hilo_sum(hi, c)
-    return FloatD64((hi, lo))
+    return Double64((hi, lo))
 end
 
 biterror(::typeof(-)) = 2.25
 
-function Base.:(-)(x::FloatD64, y::Float64) 
+function Base.:(-)(x::Double64, y::Float64) 
     hi, lo = two_diff(Hi(x), y)
     c = lo + Lo(x)
     hi, lo = two_hilo_sum(hi, c)
-    return FloatD64((hi, lo))
+    return Double64((hi, lo))
 end
 
-function Base.:(-)(x::Float64, y::FloatD64) 
+function Base.:(-)(x::Float64, y::Double64) 
     hi, lo = two_diff(x, Hi(y))
     c = lo + Lo(y)
     hi, lo = two_hilo_sum(hi, c)
-    return FloatD64((hi, lo))
+    return Double64((hi, lo))
 end
 
 # relative error < 5u², 9 FP Ops, 101.6 bits (relative)
 # "The largest relative error we have obtain through many tests is 3.936 × 2^−2p = 3.936 * 2^(-106).
 # Algorithm 12 from [Joldes, Muller, Popescu 2017]
-function Base.:(*)(x::FloatD64, y::FloatD64)
+function Base.:(*)(x::Double64, y::Double64)
     hi, lo = two_prod(Hi(x), Hi(y))
     t = Lo(x) * Lo(y)
     t = fma(Hi(x), Lo(y), t)
     t = fma(Lo(x), Hi(y), t)
     t = lo + t
     hi, lo = two_hilo_sum(hi, t)
-    return FloatD64((hi, lo))
+    return Double64((hi, lo))
 end
 
 biterror(::typeof(*)) = 3.936
 
 
-function Base.:(*)(x::FloatD64, y::Float64)
+function Base.:(*)(x::Double64, y::Float64)
     hi, lo = two_prod(Hi(x), y)
     t = Lo(x) * y   
     t = t + lo
     hi, lo = two_hilo_sum(hi, t)
-    return FloatD64((hi, lo))
+    return Double64((hi, lo))
 end
 
-function Base.:(*)(x::Float64, y::FloatD64)
+function Base.:(*)(x::Float64, y::Double64)
     hi, lo = two_prod(x, Hi(y))
     t = x * Lo(y)
     t = lo + t
     hi, lo = two_hilo_sum(hi, t)
-    return FloatD64((hi, lo))
+    return Double64((hi, lo))
 end
 
     
 # from DoubleFloats
-# Base.:(/)(x::FloatD64, y::FloatD64) = FloatD64(divide_dddd_dd(Hi(x), Lo(x), Hi(y), Lo(y)))
-(div0)(x::FloatD64, y::FloatD64) = FloatD64(divide_dddd_dd(Hi(x), Lo(x), Hi(y), Lo(y)))
+# Base.:(/)(x::Double64, y::Double64) = Double64(divide_dddd_dd(Hi(x), Lo(x), Hi(y), Lo(y)))
+(div0)(x::Double64, y::Double64) = Double64(divide_dddd_dd(Hi(x), Lo(x), Hi(y), Lo(y)))
 
 @inline function divide_dddd_dd(xhi::T, xlo::T, yhi::T, ylo::T) where {T<:Float64}
     hi = xhi / yhi
@@ -105,7 +105,7 @@ end
 
 # Algorithm 17 from [Joldes, Muller, Popescu 2017]
 # relative error <= 15u² + 56u³
-function div17(x::FloatD64, y::FloatD64)
+function div17(x::Double64, y::Double64)
     xhi, xlo = HiLo(x)
     yhi, ylo = HiLo(y)
     thi = xhi / yhi
@@ -114,11 +114,11 @@ function div17(x::FloatD64, y::FloatD64)
     dlo = xlo - rlo
     d = dhi + dlo
     tlo = d / yhi
-    return FloatD64(two_hilo_sum(thi, tlo))
+    return Double64(two_hilo_sum(thi, tlo))
 end
 
 
-function (div18)(x::FloatD64, y::FloatD64)
+function (div18)(x::Double64, y::Double64)
     yhi, ylo = HiLo(y)
     th = inv(yhi)
     rh = fma(-yhi, th, 1.0)
@@ -127,14 +127,14 @@ function (div18)(x::FloatD64, y::FloatD64)
     dh, dl = DWTimesFP3(eh, el, th) # (eh, el) * rh
     mh, ml = DWPlusFP(dh, dl, th) # (dh, dl) + th
     zh, zl = DWTimesDW2(Hi(x), Lo(x), mh, ml) # (xh, xl) * (mh, ml)
-    return FloatD64((zh, zl))
+    return Double64((zh, zl))
 end
 
 
 # relative error < 9.8u², 31 FP Ops, 100.7 bits (relative)
 # " 5.922 x 2^(-106) "
 # Algorithm 18 from [Joldes, Muller, Popescu 2017] 
-function Base.:(/)(x::FloatD64, y::FloatD64)
+function Base.:(/)(x::Double64, y::Double64)
     yhi, ylo = HiLo(y)
     th = inv(yhi)
     rh = fma(-yhi, th, 1.0)
@@ -143,7 +143,7 @@ function Base.:(/)(x::FloatD64, y::FloatD64)
     dh, dl = DWTimesFP3(eh, el, th) # (eh, el) * rh
     mh, ml = DWPlusFP(dh, dl, th) # (dh, dl) + th
     zh, zl = DWTimesDW2(Hi(x), Lo(x), mh, ml) # (xh, xl) * (mh, ml)
-    return FloatD64((zh, zl))
+    return Double64((zh, zl))
 end
 
 
@@ -151,16 +151,16 @@ end
     biterror(::typeof(/)) = 5.922
 biterror(::typeof(inv)) = 5.922
 
-function Base.:(/)(x::FloatD64, y::Float64)
+function Base.:(/)(x::Double64, y::Float64)
     th = inv(y)
     rh = fma(-y, th, 1.0)
     dh, dl = DWTimesFP3(rh, 0.0, th) # (eh, el) * rh
     mh, ml = DWPlusFP(dh, dl, th) # (dh, dl) + th
     zh, zl = DWTimesDW2(Hi(x), Lo(x), mh, ml) # (xh, xl) * (mh, ml)
-    return FloatD64((zh, zl))
+    return Double64((zh, zl))
 end
 
-function Base.:(/)(x::Float64, y::FloatD64)
+function Base.:(/)(x::Float64, y::Double64)
     yhi, ylo = HiLo(y)
     th = inv(yhi)
     rh = fma(-yhi, th, 1.0)
@@ -169,7 +169,7 @@ function Base.:(/)(x::Float64, y::FloatD64)
     dh, dl = DWTimesFP3(eh, el, th) # (eh, el) * rh
     mh, ml = DWPlusFP(dh, dl, th) # (dh, dl) + th
     zh, zl = DWTimesDW2(x, 0.0, mh, ml) # (xh, xl) * (mh, ml)
-    return FloatD64((zh, zl))
+    return Double64((zh, zl))
 end
 
 # algorithm 4 from [Joldes, Muller, Popescu 2017] 
@@ -226,7 +226,7 @@ end
 
 # relative error < 9.8u², 31 FP Ops, 100.7 bits (relative)
 # Algorithm 18 from [Joldes, Muller, Popescu 2017] 
-function Base.:(inv)(y::FloatD64)
+function Base.:(inv)(y::Double64)
     yhi, ylo = HiLo(y)
     th = inv(yhi)
     rh = fma(-yhi, th, 1.0)
@@ -235,12 +235,12 @@ function Base.:(inv)(y::FloatD64)
     dh, dl = DWTimesFP3(eh, el, th) # (eh, el) * rh
     mh, ml = DWPlusFP(dh, dl, th) # (dh, dl) + th
     # zh, zl = DWTimesDW2(1.0, 0.0, mh, ml) # (1, 0) * (mh, ml)
-    return FloatD64((mh, ml))
+    return Double64((mh, ml))
 end
 
-Base.:(\)(x::FloatD64, y::FloatD64) = (/)(y, x)
-Base.:(\)(x::FloatD64, y::Float64) = (/)(y, x)
-Base.:(\)(x::Float64, y::FloatD64) = (/)(y, x)
+Base.:(\)(x::Double64, y::Double64) = (/)(y, x)
+Base.:(\)(x::Double64, y::Float64) = (/)(y, x)
+Base.:(\)(x::Float64, y::Double64) = (/)(y, x)
 
 for (T1, T2) in ((:ComplexD64, :ComplexD64), (:ComplexD64, :ComplexF64), (:ComplexF64, :ComplexD64))
   @eval begin
@@ -377,7 +377,7 @@ function Kahan(a, b, c, d)
     return r
 end
 
-Base.fma(x::FloatD64,y::FloatD64,z::FloatD64) = muladd(x,y,z)
+Base.fma(x::Double64,y::Double64,z::Double64) = muladd(x,y,z)
 =#
 #=
 
@@ -387,7 +387,7 @@ function normalizedenom(n,d)
     return n, fr
 end
 
-function normalized(n::FloatD64, d::FloatD64)
+function normalized(n::Double64, d::Double64)
     scaleby = inv(Hi(d))
     return n*scaleby, d*scaleby
 end
@@ -405,7 +405,7 @@ function Goldschmidt(n::T,d::T,k) where {T}
     return q
 end
 
-function Goldschmidt(n::FloatD64,d::FloatD64,k=4)}
+function Goldschmidt(n::Double64,d::Double64,k=4)}
     n1, d1 = normalized(n,d)
     e = 1 - d1
     q = n1;  qold = zero(T)

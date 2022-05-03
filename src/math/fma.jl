@@ -43,14 +43,14 @@ function Base.fma(xhi::T, xlo::T, yhi::T, ylo::T, zhi::T, zlo::T) where {T<:Floa
    vhi, vlo = two_hilo_sum(shi, c)
    w = tlo + vlo
    hi, lo = two_hilo_sum(vhi, w)
-   return FloatD64((hi, lo))
+   return Double64((hi, lo))
 end
 
-@inline function Base.fma(x::T, y::T, z::T) where {T<:FloatD64}
+@inline function Base.fma(x::T, y::T, z::T) where {T<:Double64}
    return fma(Hi(x), Lo(x), Hi(y), Lo(y), Hi(z), Lo(z))
 end
 
-for T in (:FloatD64, :ComplexD64)
+for T in (:Double64, :ComplexD64)
    @eval @inline function Base.muladd(x::$T, y::$T, z::$T)
       return x*y + z
    end
@@ -68,9 +68,9 @@ function Base.:(*)(ahi::T, alo::T, bhi::T, blo::T) where {T<:Float64}
    p2 += alo*bhi + ahi*blo
    chi = p1 + p2
    clo = p2 - (chi - p1)
-   return FloatD64((chi, clo))
+   return Double64((chi, clo))
 end
 
-@inline function Base.:(*)(a::T, b::T) where {T<:FloatD64}
+@inline function Base.:(*)(a::T, b::T) where {T<:Double64}
    return (*)(Hi(a), Lo(a), Hi(b), Lo(b))
 end

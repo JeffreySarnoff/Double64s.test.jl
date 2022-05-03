@@ -1,13 +1,13 @@
-function Base.modf(x::FloatD64)
+function Base.modf(x::Double64)
     frc_hi, int_hi = modf(Hi(x))
     frc_lo, int_lo = modf(Lo(x))
-    frc_part = FloatD64((frc_hi, frc_lo))
-    int_part = FloatD64((int_hi, int_lo))
+    frc_part = Double64((frc_hi, frc_lo))
+    int_part = Double64((int_hi, int_lo))
     return (frc_part, int_part)
 end
 
-fmod(parts::Tuple{FloatD64, FloatD64}) = fmod(parts...)
-function fmod(frc_part::FloatD64, int_part::FloatD64)
+fmod(parts::Tuple{Double64, Double64}) = fmod(parts...)
+function fmod(frc_part::Double64, int_part::Double64)
     return int_part + frc_part
 end
 
@@ -32,8 +32,8 @@ end
 # ACM Transactions on Mathematical Software Vol. 32, No. 2 pg 337
 # .. IEEE-754 double precision as working precision (εw = 2−53) and double-double as residual precision (εr ≈ 2−105)."
 
-Base.eps(::Type{FloatD64})   = 2.465190328815662e-32
-Base.eps(x::FloatD64) = iszero(Lo(x)) ? Hi(x) * 2.465190328815662e-32 : eps(Lo(x))
+Base.eps(::Type{Double64})   = 2.465190328815662e-32
+Base.eps(x::Double64) = iszero(Lo(x)) ? Hi(x) * 2.465190328815662e-32 : eps(Lo(x))
 
 #=
    faster 2.0^p
@@ -49,10 +49,10 @@ ldexp2pow(p::Float64) = ldexp(1.0, p)
     unsafe_ufp(x) errors on x in (NaN, Inf)
 =#
 @inline unsafe_ufp(x::Float64) = !iszero(x) ? ldexp(1.0, exponent(x)) : x
-unsafe_ufp(x::FloatD64) = unsafe_ufp(Hi(x))
+unsafe_ufp(x::Double64) = unsafe_ufp(Hi(x))
 
 ufp(x::Float64) = isfinite(x) ? unsafe_ufp(x) : x
-ufp(x::FloatD64) = ufp(Hi(x))
+ufp(x::Double64) = ufp(Hi(x))
 
 #=
 Formal Verification of a Floating-Point Expansion Renormalization Algorithm
@@ -102,7 +102,7 @@ ssbits(x::Float64) =
 
 # --------------------------------------------------------
 
-function nearestint(x::T) where {T<:Union{Float64, FloatD64}}
+function nearestint(x::T) where {T<:Union{Float64, Double64}}
     s, absx = signbit(x), abs(x)
     absx = absx + 0.5
     absx = trunc(absx)

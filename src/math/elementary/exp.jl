@@ -3,9 +3,9 @@
    The associaed functions `expm1(x)` and `expm1(z)`.
 =#
 
-const Ln2_D64 = FloatD64((0.6931471805599453, 2.3190468138462996e-17))
+const Ln2_D64 = Double64((0.6931471805599453, 2.3190468138462996e-17))
 
-function Base.exp(x::FloatD64)
+function Base.exp(x::Double64)
    exp_specialvalues(Hi(x))
    # 4.3108e-78 <= absx < 709.9
    absx = abs(x)
@@ -24,7 +24,7 @@ function exp_specialvalues(x::Float64)
    isnan(x) && return x
    absx = abs(x)
    absx > 709.0 && return signbit(x) ? -InfD64 : InfD64
-   abx < 2.0^-257 && return one(FloatD64)
+   abx < 2.0^-257 && return one(Double64)
    return nothing
 end
 
@@ -559,27 +559,27 @@ kv-master
 ```
 
 julia> x
-FloatD64((19.73721077166514, -1.6936500472509631e-15))
+Double64((19.73721077166514, -1.6936500472509631e-15))
 
 julia> x/Ln2
-FloatD64((28.474776101261526, -8.19680688222626e-17))
+Double64((28.474776101261526, -8.19680688222626e-17))
 
 julia> xoLn2 = ans
-FloatD64((28.474776101261526, -8.19680688222626e-17))
+Double64((28.474776101261526, -8.19680688222626e-17))
 
 julia> x_i = floor(x)
-FloatD64((19.0, 0.0))
+Double64((19.0, 0.0))
 
 julia> x_f = x - x_i
-FloatD64((0.7372107716651383, -2.831551031322832e-17))
+Double64((0.7372107716651383, -2.831551031322832e-17))
 
 julia> x_f = x_f - 1
-FloatD64((-0.2627892283348618, 2.7195640918029507e-17))
+Double64((-0.2627892283348618, 2.7195640918029507e-17))
 
 julia> x_i = x_i + 1
-FloatD64((20.0, 0.0))
+Double64((20.0, 0.0))
 
-julia> r = y = FloatD64(1);
+julia> r = y = Double64(1);
 
 julia> for i=1:25
          y = y * x_f
@@ -588,19 +588,19 @@ julia> for i=1:25
        end
 
 julia> x_i
-FloatD64((20.0, 0.0))
+Double64((20.0, 0.0))
 
-julia> e1 = FloatD64(exp(BigFloat(1)))
-FloatD64((2.718281828459045, 1.4456468917292502e-16))
+julia> e1 = Double64(exp(BigFloat(1)))
+Double64((2.718281828459045, 1.4456468917292502e-16))
 
-julia> e2 = FloatD64(BigFloat(e1)^BigFloat(x_i))
-FloatD64((4.851651954097903e8, 4.880277289790481e-10))
+julia> e2 = Double64(BigFloat(e1)^BigFloat(x_i))
+Double64((4.851651954097903e8, 4.880277289790481e-10))
 
 julia> r2 = r * e2
-FloatD64((3.730454319498937e8, -6.494042474083988e-10))
+Double64((3.730454319498937e8, -6.494042474083988e-10))
 
-julia> expa = FloatD64(exp(BigFloat(a)))
-FloatD64((3.730454319498937e8, -6.49404247408404e-10))
+julia> expa = Double64(exp(BigFloat(a)))
+Double64((3.730454319498937e8, -6.49404247408404e-10))
 ```
 	friend dd exp(const dd& x) {
 		dd x_i, x_f, tmp;

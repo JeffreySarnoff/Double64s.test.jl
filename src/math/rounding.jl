@@ -1,58 +1,58 @@
-Base.round(x::FloatD64) = round(x, RoundNearest)
-Base.round(::Type{T}, x::FloatD64) where {T<:Integer} = T(round(x, RoundNearest))
+Base.round(x::Double64) = round(x, RoundNearest)
+Base.round(::Type{T}, x::Double64) where {T<:Integer} = T(round(x, RoundNearest))
 
-function Base.round(x::FloatD64, ::RoundingMode{:Up})
+function Base.round(x::Double64, ::RoundingMode{:Up})
     return ceil(x)
 end
-Base.round(::Type{T}, x::FloatD64, ::RoundingMode{:Up}) where {T<:Integer} = T(round(x, RoundUp))
+Base.round(::Type{T}, x::Double64, ::RoundingMode{:Up}) where {T<:Integer} = T(round(x, RoundUp))
 
-function Base.round(x::FloatD64, ::RoundingMode{:Down})
+function Base.round(x::Double64, ::RoundingMode{:Down})
     return floor(x)
 end
-Base.round(::Type{T}, x::FloatD64, ::RoundingMode{:Down}) where {T<:Integer} = T(round(x, RoundDown))
+Base.round(::Type{T}, x::Double64, ::RoundingMode{:Down}) where {T<:Integer} = T(round(x, RoundDown))
 
-function Base.round(x::FloatD64, ::RoundingMode{:ToZero})
+function Base.round(x::Double64, ::RoundingMode{:ToZero})
     return signbit(x) ? ceil(x) : floor(x)
 end
-Base.round(::Type{T}, x::FloatD64, ::RoundingMode{:ToZero}) where {T<:Integer} = T(round(x, RoundToZero))
+Base.round(::Type{T}, x::Double64, ::RoundingMode{:ToZero}) where {T<:Integer} = T(round(x, RoundToZero))
 
-function Base.round(x::FloatD64, ::RoundingMode{:RoundFromZero})
+function Base.round(x::Double64, ::RoundingMode{:RoundFromZero})
     return signbit(x) ? floor(x) : ceil(x)
 end
-Base.round(::Type{T}, x::FloatD64, ::RoundingMode{:FromZero}) where {T<:Integer} = T(round(x, RoundFromZero))
+Base.round(::Type{T}, x::Double64, ::RoundingMode{:FromZero}) where {T<:Integer} = T(round(x, RoundFromZero))
 
-function Base.round(x::FloatD64, ::RoundingMode{:Nearest})
+function Base.round(x::Double64, ::RoundingMode{:Nearest})
     signbit(x) && return -round(-x, RoundNearest)
     a = trunc(x + 0.5)
     return iseven(a) ? a : trunc(x - 0.5)
 end
-Base.round(::Type{T}, x::FloatD64, ::RoundingMode{:Nearest}) where {T<:Integer} = T(round(x, RoundNearest))
+Base.round(::Type{T}, x::Double64, ::RoundingMode{:Nearest}) where {T<:Integer} = T(round(x, RoundNearest))
 
-function Base.round(x::FloatD64, ::RoundingMode{:NearestTiesAway})
+function Base.round(x::Double64, ::RoundingMode{:NearestTiesAway})
     signbit(x) && return -round(-x, RoundNearestTiesAway)
     !isinteger(x - 0.5) && return round(x, RoundNearest)
     return round(x + 0.5, RoundNearest)
 end
-Base.round(::Type{T}, x::FloatD64, ::RoundingMode{:NearestTiesAway}) where {T<:Integer} = T(round(x, RoundNearestTiesAway))
+Base.round(::Type{T}, x::Double64, ::RoundingMode{:NearestTiesAway}) where {T<:Integer} = T(round(x, RoundNearestTiesAway))
 
-function Base.round(x::FloatD64, ::RoundingMode{:NearestTiesUp})
+function Base.round(x::Double64, ::RoundingMode{:NearestTiesUp})
     signbit(x) && return -round(-x, RoundNearestTiesUp)
     !isinteger(x - 0.5) && return round(x, RoundUp)
     return round(x + 0.5, RoundNearest)
 end
-Base.round(::Type{T}, x::FloatD64, ::RoundingMode{:NearestTiesUp}) where {T<:Integer} = T(round(x, RoundNearestTiesUp))
+Base.round(::Type{T}, x::Double64, ::RoundingMode{:NearestTiesUp}) where {T<:Integer} = T(round(x, RoundNearestTiesUp))
 
 #=
-Base.round(x::FloatD64; digits::Integer=0, base = 10) = FloatD64(round(Float128(x); digits=digits, base=base))
-Base.round(x::FloatD64; sigdigits::Integer=0, base = 10) = FloatD64(round(Float128(x); sigdigits=sigdigits, base=base))
-Base.round(x::FloatD64, r::RoundingMode; digits=Integer=0, base = 10) = FloatD64(round(Float128(x), r; digits=digits, base=base))
-Base.round(x::FloatD64, r::RoundingMode; sigdigits=Integer=0, base = 10) = FloatD64(round(Float128(x), r; sigdigits=sigdigits, base=base))
+Base.round(x::Double64; digits::Integer=0, base = 10) = Double64(round(Float128(x); digits=digits, base=base))
+Base.round(x::Double64; sigdigits::Integer=0, base = 10) = Double64(round(Float128(x); sigdigits=sigdigits, base=base))
+Base.round(x::Double64, r::RoundingMode; digits=Integer=0, base = 10) = Double64(round(Float128(x), r; digits=digits, base=base))
+Base.round(x::Double64, r::RoundingMode; sigdigits=Integer=0, base = 10) = Double64(round(Float128(x), r; sigdigits=sigdigits, base=base))
 =#
 
 
 #=
 # NOTE: this relies on the current keyword dispatch behaviour (#9498).
-function Base.round(x::FloatD64, r::RoundingMode=RoundNearest;
+function Base.round(x::Double64, r::RoundingMode=RoundNearest;
                digits::Union{Nothing,Integer}=nothing, sigdigits::Union{Nothing,Integer}=nothing, base::Union{Nothing,Integer}=nothing)
     if digits === nothing
         if sigdigits === nothing
@@ -78,12 +78,12 @@ function Base.round(x::FloatD64, r::RoundingMode=RoundNearest;
 end
 =#
 
-function Base._round_sigdigits(x::FloatD64, r::RoundingMode, sigdigits::Integer, base)
+function Base._round_sigdigits(x::Double64, r::RoundingMode, sigdigits::Integer, base)
     h = Base.hidigit(x, base)
     Base._round_digits(x, r, sigdigits-h, base)
 end
 
-Base.hidigit(x::FloatD64, base) = Base.hidigit(Hi(x), base)
+Base.hidigit(x::Double64, base) = Base.hidigit(Hi(x), base)
 
 
 #=
