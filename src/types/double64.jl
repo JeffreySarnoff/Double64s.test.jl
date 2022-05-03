@@ -99,6 +99,22 @@ struct ComplexD64 <: Number
     hilo::Tuple{Complex{Float64}, Complex{Float64}}
 end
 
+function ComplexD64(hi::Complex{Float64}, lo::Complex{Float64})
+    rehi, relo = two_sum(real(hi), real(lo))
+    imhi, imlo = two_sum(imag(hi), imag(lo))
+    hi = ComplexF64(rehi, imhi)
+    lo = ComplexF64(relo, imlo)
+    ComplexD64((hi, lo))
+end
+
+function ComplexD64(real::FloatD64, imag::FloatD64)
+    rehi, relo = HiLo(real)
+    imhi, imlo = HiLo(imag)
+     hi = ComplexF64(rehi, imhi)
+    lo = ComplexF64(relo, imlo)
+    ComplexD64((hi, lo))
+end    
+    
 Hi(x::ComplexD64) = x.hilo[1]
 Lo(x::ComplexD64) = x.hilo[2]
 HiLo(x::ComplexD64) = x.hilo
