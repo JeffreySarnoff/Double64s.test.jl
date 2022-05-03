@@ -35,7 +35,7 @@ There are more than three approaches, here are three:
 A struct wrapping a Tuple of two Float64s: (most significant part, least significant part).
 
 Also a constructor for that struct.
-""" FloatD64
+""" Double64
 
 struct Double64 <: AbstractFloat
     hilo::Tuple{Float64, Float64}
