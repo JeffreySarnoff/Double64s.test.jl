@@ -43,11 +43,10 @@ include("math/rounding.jl")
 include("math/fma.jl")
 include("math/roots.jl")
 
-Base.log10(x::FloatD64) = FloatD64(log10(Float128(x)))
-Base.log2(x::FloatD64) = FloatD64(log2(Float128(x)))
-Base.log(x::FloatD64) = FloatD64(log(Float128(x)))
-Base.exp10(x::FloatD64) = FloatD64(exp10(Float128(x)))
-Base.exp2(x::FloatD64) = FloatD64(exp2(Float128(x)))
-Base.exp(x::FloatD64) = FloatD64(exp(Float128(x)))
+for F in (:abs, :acos, :acosh, :asin, :asinh, :atan, :atanh, :ceil, :cos, :cosh,
+          :exp, :exp2, :exp10, :expm1, :log, :log2, :log10, :log1p,
+          :sin, :sinh, :sqrt)
+    @eval Base.$F(x::Double64) = Double64($F(Float128(x)))
+end
 
 end  # Double64s
