@@ -44,6 +44,9 @@ end
 # indirect initialization (two_sum returns a 2-Tuple)
 FloatD64(x::Float64, y::Float64) = FloatD64(two_sum(x,y))
 
+# with a single Float64
+FloatD64(x::Float64) = FloatD64(x, 0.0)
+
 # idempotency
 FloatD64(x::FloatD64) = x
 
@@ -91,7 +94,22 @@ A complex value formed or FloatD64 real and imaginary parts
 
 Also a constructor for that.
 """ 
-const ComplexD64 = Complex{FloatD64}
+
+struct ComplexD64 <: Complex
+    hilo::Tuple{Complex{Float64}, Complex{Float64}}
+end
+
+Hi(x::ComplexD64) = x.hilo[1]
+Lo(x::ComplexD64) = x.hilo[2]
+HiLo(x::ComplexD64) = x.hilo
+
+Base.real(x::ComplexD64) = FloatD64(real(hi(x)), real(lo(x)))
+Base.imag(x::ComplexD64) = FloatD64(imag(hi(x)), imag(lo(x)))
+
+ComplexD64(real::FloatD64, imag::FloatD64) =
+    ComplexD64(Complex{Float64}(Hi(real), Hi(imag)), Complex(Float64(Lo(real), Lo(imag)))
+    
+const CplxD64 = Complex{FloatD64}
 
 Hi(x::ComplexD64) = ComplexF64(Hi(x.re), Hi(x.im))
 Lo(x::ComplexD64) = ComplexF64(Lo(x.re), Lo(x.im))
