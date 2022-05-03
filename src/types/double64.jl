@@ -41,14 +41,22 @@ struct FloatD64 <: AbstractFloat
     hilo::Tuple{Float64, Float64}
 end
 
+FloatD64(x::FloatD64) = x   # idempotent
+
 # indirect initialization (two_sum returns a 2-Tuple)
 FloatD64(x::Float64, y::Float64) = FloatD64(two_sum(x,y))
 
 # with a single Float64
 FloatD64(x::Float64) = FloatD64(x, 0.0)
 
-# idempotency
-FloatD64(x::FloatD64) = x
+FloatD64(x::T) where {T<:Union{Float16, Float32}} = FloatD64(Float64(x))
+FloatD64(x::T) where {T<:Union{Int8, Int16, Int32}} = FloatD64(Float64(x))
+
+function FloatD64(x::T) where {T<:Union{Int64, Float128, Int128, BigInt, BigFloat}}
+    hi = Float64(x)
+    lo = Float64(x - hi)
+    FloatD64((hi, lo))
+end
 
 """
    HiLo(x)
@@ -104,6 +112,10 @@ struct ComplexD64 <: Number
     hilo::Tuple{Complex{Float64}, Complex{Float64}}
 end
 
+ComplexD64(x::ComplexD64) = x
+ComplexD64(x::FloatD64) = ComplexD64((x, ZeroD64))
+ComplexD64(x::Float64) = ComplexD64((FloatD64(x), ZeroD64)))
+    
 function ComplexD64(hi::Complex{Float64}, lo::Complex{Float64})
     rehi, relo = two_sum(real(hi), real(lo))
     imhi, imlo = two_sum(imag(hi), imag(lo))
