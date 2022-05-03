@@ -10,7 +10,7 @@ for T in (:Int64, :Int128)
         hi = Float64(x)
         lo = 0.0
     else
-        bf = BigFloat(x)
+        bf = Float128(x)
         hi = Float64(x)
         lo = Float64(bf - hi)
     end
@@ -67,4 +67,5 @@ for T in (:Float32, :Float16, :Int32, :Int16, :Int8)
     @eval Base.$T(x::FloatD64) = $T(Hi(x))
 end
 
-Quadmath.Float128(x::FloatD64) = Float128(Hi(x)) + Float128(Lo(x))
+Float128(x::FloatD64) = Float128(Hi(x)) + Float128(Lo(x))
+FloatD64(x::Float128) = FloatD64((Float64(x), Float64(x-Float64(x))))
